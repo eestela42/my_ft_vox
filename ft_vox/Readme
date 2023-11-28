@@ -1,0 +1,33 @@
+README
+
+Recupere de scop (projet affichage objet 3d) :
+	-affichage d'un objet 3d
+	-rotation de l'objet
+  -zoom et dezoom
+  -compteur de fps
+
+Ancienne class -> mesh (il reste des reliques de cette class dans le code a ignorer)
+Nouvelle class -> chunk
+
+Dans le main :
+  game.init() :
+  - init cree le context opengl
+  - cree le chunk
+  - cree les [vertexes + info] et triangles a partir du chunk
+
+(open gl prends 2 tableaux de donnes le VBO et le EBO)
+(le VBO contient les infos par vertexes, donc position, couleur, normale, texture...)
+(le EBO contient les indices des vertexes (du VBO) pour former les triangles)
+
+  game.initShadder game.initBuffers :
+  - sont explicit (le VAO ca sert a faire des trucs bizarre je connais pas)
+
+
+
+  -Matrices de rotations /view / projection
+(glUniform = des variables que l'on passe au shader commun a tous les vertexes)
+
+  -gestion des fps
+
+  Boucle while(!shoudlNotClose) :
+  -glDrawElements : dessine les triangles    
