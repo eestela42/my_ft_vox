@@ -9,6 +9,8 @@
 
 namespace ee
 {
+
+
 class mat4
 {
 	public:
@@ -18,6 +20,7 @@ class mat4
 		mat4(float diag);
 
 		mat4&	operator=(const mat4 &rhs);
+		mat4&	operator=(const glm::mat4 &rhs);
 		float*	operator[](int index);
 		mat4	operator*(const mat4 &rhs);
 		
@@ -27,7 +30,7 @@ class mat4
 
 		void	print_mat();
 		float&	getValue();
-	private:
+	// private:
 		float	value[4][4];
 
 };

@@ -23,5 +23,4 @@
 
 # include "types.hpp"
 
-
 #endif

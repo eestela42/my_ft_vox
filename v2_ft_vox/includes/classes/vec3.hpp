@@ -9,7 +9,8 @@ namespace ee
 
 class vec3
 {
-	private :
+	// private :
+	public :
 		float x;
 		float y;
 		float z;
@@ -21,12 +22,15 @@ class vec3
 		vec3(const float &x, const float &y, const float &z);
 		vec3(const float* src);
 
+		glm::vec3		toGlm() const;
+
 		float*	getFloatTab() const;
 		float	getx() const;
 		float	gety() const;
 		float	getz() const;
 		
 		vec3&	operator=(const vec3 &rhs);
+		vec3& 	operator=(const glm::vec3* rhs);
 		vec3&	operator=(const float &rhs);
 		vec3&	operator=(const float* rhs);
 		vec3	operator+(const vec3 &rhs) const;
@@ -59,6 +63,9 @@ vec3			operator*(const float lhs, const vec3 &rhs);
 vec3			operator/(const float lhs, const vec3 &rhs);
 vec3			operator+(const float lhs, const vec3 &rhs);
 vec3			operator-(const float lhs, const vec3 &rhs);
+
+
+
 }
 
 #endif

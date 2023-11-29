@@ -33,6 +33,14 @@ mat4& mat4::operator=(const mat4 &rhs)
 	return (*this);
 }
 
+mat4&	mat4::operator=(const glm::mat4 &rhs)
+{
+	for (int i = 0; i < 4; i++)
+		for (int y = 0; y < 4; y++)
+			this->value[i][y] = rhs[i][y];
+	return (*this);
+}
+
 float*	mat4::operator[](int index)
 {
 	return (this->value[index]);

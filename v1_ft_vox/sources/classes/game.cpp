@@ -49,19 +49,8 @@ int game::init()
 		return 2;
 	}
 
-	this->chunks = new ee::chunk[10];
-	int x = -4;
-	int y = -4;
-	for (int i = 0; i < 10; i++)
-	{
-		std::cout << "chunk : " << i << std::endl;
-		this->chunks[i] = ee::chunk(x, y);
-		this->chunks[i].fill();
-		this->chunks[i].dataToVBO(this->base_vertexes, this->triangles, this->toVBO);
-		x++;
-		y++;
-	}
-	
+	this->chunk.fill();
+	this->chunk.dataToVBO();
 
 
 	
@@ -139,11 +128,11 @@ int game::initBuffers()
     glBindVertexArray(VAO);
 	
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, this->toVBO.size() * sizeof(t_block_info), &this->toVBO[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, this->chunk.memoryToVBO(), this->chunk.getToVBO(), GL_STATIC_DRAW);
 	// glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->triangles.size() * sizeof(t_triangle), &this->triangles[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->chunk.memoryToEBO(), this->chunk.getToEBO(), GL_STATIC_DRAW);
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // position attribute
@@ -227,7 +216,7 @@ void	game::chunkToVBO()
 
 ee::chunk&	game::getChunk()
 {
-	return (this->chunks[0]);
+	return (this->chunk);
 }
 
 

@@ -15,6 +15,4 @@ typedef struct s_triangle
 
 
 
-
-
 #endif

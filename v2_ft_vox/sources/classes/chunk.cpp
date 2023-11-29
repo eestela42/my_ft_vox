@@ -5,6 +5,13 @@ using namespace ee;
 
 chunk::chunk() : pos_x(0), pos_y(0)
 {
+	std::cout << "constructor no args" << std::endl;
+	this->data = new char[this->size_x * this->size_y * this->size_z];
+}
+
+chunk::chunk(int x, int y) : pos_x(x), pos_y(y)
+{
+	std::cout << "constructor args" << std::endl;
 	this->data = new char[this->size_x * this->size_y * this->size_z];
 }
 
@@ -17,16 +24,22 @@ chunk::~chunk()
 void chunk::fill()
 {
 	char block_type[2] = {1, 2};
-	for (int z = 0; z < this->size_z / 2; z++)
+	for (int i = 0; i < this->size_x * this->size_y * this->size_z; i++)
 	{
-		for (int y = 0; y < this->size_y; y++)
+		this->data[i] = 0;
+		std::cout << "i : " << i << std::endl;
+	}
+	for (int z = 0; z < 10; z++)
+	{
+		for (int y = 0; y < size_y; y++)
 		{
-			for (int x = 0; x < this->size_x; x++)
+			for (int x = 0; x < size_x; x++)
 			{
 				this->data[x + y * this->size_x + z * this->size_x * this->size_y] = block_type[(x % 2 + y % 2 + z % 2) % 2];
 			}
 		}
 	}
+	std::cout << "out fill" << std::endl;
 	
 }
 
@@ -38,72 +51,13 @@ struct ThreeBitVariable {
 
 void createCube(int x, int y, int z, int zero, std::vector<vec3> &base_vertexes, std::vector<t_triangle> &triangles)
 {
-	// ThreeBitVariable 	count;
 	
-	// count.value = 0;
-	// std::vector<ThreeBitVariable> posib;
-	// while(1)
-	// {
-	// 	posib.push_back(count);
-	// 	unsigned int bit = 0;
-	// 	vec3 pos;
-	// 	bit = (count.value >> 2) & 1;
-	// 	pos[0] = x + 1 * bit;
-	// 	bit = (count.value >> 1) & 1;
-	// 	pos[1] = y + 1 * bit;
-	// 	bit = (count.value >> 0) & 1;
-	// 	pos[2] =  + 1 * bit;
-	// 	base_vertexes.push_back(pos);
-	// 	if (count.value == 7)
-	// 		break;
-	// 	count.value++;
-	// }
-
-	// bool yes = false;
-	// int pos = 0;
-	// for (int i = 1; i <= 6; i++)
-	// {
-	// 	std::vector<unsigned int> tmp;
-	// 	for (int j = 0; j < posib.size(); j++)
-	// 	{
-	// 		if ((posib[j].value >> (2 - pos) & 1) == yes)
-	// 		{
-	// 			tmp.push_back(zero + j);
-	// 		}
-	// 	}
-	// 	triangles.push_back({tmp[0], tmp[1], tmp[2]});
-	// 	triangles.push_back({tmp[0], tmp[2], tmp[3]});
-		
-
-	// 	yes = !yes;
-	// 	if (!yes)
-	// 		pos++;
-	// }
-//000 = 0 001 = 1 010 = 2 011 = 3 100 = 4 101 = 5 110 = 6 111 = 7
-
-
-/*
-v 0.0f 0.0f 0.0f
-v 0.0f 1.0f 0.0f
-v 1.0f 1.0f 0.0f
-v 1.0f 0.0f 0.0f
-v 0.0f 0.0f 1.0f
-v 0.0f 1.0f 1.0f
-v 1.0f 1.0f 1.0f
-v 1.0f 0.0f 1.0f
-
-
-
-
-
-
-
-*/
-
+	//bas
 	base_vertexes.push_back({x,		y, 		z});
 	base_vertexes.push_back({x, 	y+1, 	z});
 	base_vertexes.push_back({x+1, 	y+1, 	z});
 	base_vertexes.push_back({x+1, 	y, 		z});
+	//haut
 	base_vertexes.push_back({x, 	y, 		z+1});
 	base_vertexes.push_back({x, 	y+1, 	z+1});
 	base_vertexes.push_back({x+1, 	y+1, 	z+1});
@@ -111,43 +65,37 @@ v 1.0f 0.0f 1.0f
 
 	t_triangle tmp;
 	zero--;
-// f 1 2 3
-// f 1 3 4
+	//dessous
 	tmp.v[0] = zero + 1; tmp.v[1] = zero + 2; tmp.v[2] = zero + 3;
 	triangles.push_back(tmp);
 	tmp.v[0] = zero + 1; tmp.v[1] = zero + 3; tmp.v[2] = zero + 4;
 	triangles.push_back(tmp);
 
-// f 4 3 7
-// f 4 7 8
+	//est
 	tmp.v[0] = zero + 4; tmp.v[1] = zero + 3; tmp.v[2] = zero + 7;
 	triangles.push_back(tmp);
 	tmp.v[0] = zero + 4; tmp.v[1] = zero + 7; tmp.v[2] = zero + 8;
 	triangles.push_back(tmp);
 
-// f 8 7 6
-// f 8 6 5
+	//haut
 	tmp.v[0] = zero + 8; tmp.v[1] = zero + 7; tmp.v[2] = zero + 6;
 	triangles.push_back(tmp);
 	tmp.v[0] = zero + 8; tmp.v[1] = zero + 6; tmp.v[2] = zero + 5;
 	triangles.push_back(tmp);
 
-// f 5 6 2
-// f 5 2 1
+	//ouest
 	tmp.v[0] = zero + 5; tmp.v[1] = zero + 6; tmp.v[2] = zero + 2;
 	triangles.push_back(tmp);
 	tmp.v[0] = zero + 5; tmp.v[1] = zero + 2; tmp.v[2] = zero + 1;
 	triangles.push_back(tmp);
 
-// f 2 6 7
-// f 2 7 3
+	//sud
 	tmp.v[0] = zero + 2; tmp.v[1] = zero + 6; tmp.v[2] = zero + 7;
 	triangles.push_back(tmp);
 	tmp.v[0] = zero + 2; tmp.v[1] = zero + 7; tmp.v[2] = zero + 3;
 	triangles.push_back(tmp);
 
-// f 8 5 1
-// f 8 1 4
+	//nord
 	tmp.v[0] = zero + 8; tmp.v[1] = zero + 5; tmp.v[2] = zero + 1;
 	triangles.push_back(tmp);
 	tmp.v[0] = zero + 8; tmp.v[1] = zero + 1; tmp.v[2] = zero + 4;
@@ -159,26 +107,50 @@ v 1.0f 0.0f 1.0f
 }
 
 
-void chunk::dataToVBO()
+void chunk::dataToVBO(std::vector<vec3> &base_vertexes, std::vector<t_triangle> &triangles, std::vector<t_block_info> &toVBO)
 {
-	std::vector<vec3> base_vertexes;
+	;
 	// std::vector<t_triangle> triangles;
+	std::cout << "in tovbo" << std::endl;
+	std::cout << "vertexes size : " << base_vertexes.size() << std::endl;
+	std::cout << "triangles size : " << triangles.size() << std::endl;
+	std::cout << "toVBO size : " << toVBO.size() << std::endl;
 	for (int z = 0; z < this->size_z; z++)
 	{
+		// std::cout << "z" << std::endl;
 		for (int y = 0; y < this->size_y; y++)
 		{
+		// std::cout << "y" << std::endl;
+
 			for (int x = 0; x < this->size_x; x++)
 			{
+				std::cout << "IN 0" << std::endl;
+				std::cout << "x : " << x << " y : " << y << " z : " << z << std::endl;
 				std::cout << "max = " << 256*32*32 << " me = " << x + y * this->size_x + z * this->size_x * this->size_y << std::endl;
 				if (this->data[x + y * this->size_x + z * this->size_x * this->size_y] == 0)
+				{
+					std::cout << "continue" << std::endl;
 					continue;
-
-				
+				}
+			std::cout << "IN 1" << std::endl;
+				if ( x != this->size_x - 1 && x != 0 && y !=size_y - 1 && y != 0 && z != size_z - 1 && z != 0 &&
+					this->data[x - 1 + y * this->size_x + z * this->size_x * this->size_y] != 0 &&
+					this->data[x + 1 + y * this->size_x + + z * this->size_x * this->size_y] != 0 &&
+					this->data[x + (y - 1) * this->size_x - 1 + z * this->size_x * this->size_y] != 0 &&
+					this->data[x + (y + 1) * this->size_x + 1 + z * this->size_x * this->size_y] != 0 &&
+					this->data[x + y * this->size_x + 1 + (z - 1) * this->size_x * this->size_y] != 0 &&
+					this->data[x + y * this->size_x + 1 + (z + 1) * this->size_x * this->size_y] != 0)
+					{
+						std::cout << "continue 2" << std::endl;
+						continue;
+					}
+			std::cout << "IN 2" << std::endl;
 				int zero = base_vertexes.size();
 				
 				// if (!zero)
 				// 	zero = 1;
 				// std::cout << "create cube " << std::endl;
+				
 				createCube(x, y, z, zero, base_vertexes, triangles);
 
 				for (;zero < base_vertexes.size(); zero++)
@@ -186,19 +158,28 @@ void chunk::dataToVBO()
 					t_block_info tmp;
 					tmp.pos = base_vertexes[zero];
 					tmp.normal = 0;
-					tmp.type = this->data[x + y * this->size_x + z * this->size_x * this->size_y];
+					tmp.type = this->data[x + y * this->size_x + z * this->size_x * this->size_y] - 1;
 					// std::cout << "tmp.pos : " << tmp.pos[0] << " " << tmp.pos[1] << " " << tmp.pos[2] << std::endl;
-					this->toVBO.push_back(tmp);
+					toVBO.push_back(tmp);
 				}
-				
+				// std::cout << "end" << std::endl;
 				// for (int i = 0; i < triangles.size(); i++)
 				// {
 				// 	std::cout << "triangles[" << i << "] : " << triangles[i].v[0] << " " << triangles[i].v[1] << " " << triangles[i].v[2] << std::endl;
 				// }
 			}
+			// std::cout << "y = " << y << std::endl;
 		}
+		// std::cout << "z = " << z << std::endl;
 	}
-		
+	std::cout << "out tovbo" << std::endl;	
+	std::cout << std::endl;
+}
+
+void chunk::setPos(int x, int y)
+{
+	this->pos_x = x;
+	this->pos_y = y;
 }
 
 void chunk::setData(char *tmp)

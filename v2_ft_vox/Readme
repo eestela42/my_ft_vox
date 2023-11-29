@@ -31,3 +31,26 @@ Dans le main :
 
   Boucle while(!shoudlNotClose) :
   -glDrawElements : dessine les triangles    
+
+
+  Creation des triangles a partir des cubes :
+
+  a partir de la pos du cube cree les 8 vertexes en utilisant une var de 3 bits (ThreeBitVariable dans le code)
+  donc de toutes les combinaisons de 3 bits 
+  bit[0-1-2] si bit[0] == 1 alors pos.x = cub_pos.x + 1 etc...
+
+  puis on cree les triangles a partir des combinaisons de var de  3 bits
+  logique actuelle (ne marche pas ou mal appliquee) :
+	- chaque face = toutes les combinaisons de 3 bits qui ont la meme value sur l'un des bits
+
+000 001 010 011 100 101 110 111
+
+face A 000 001 010 011
+face B 100 101 110 111
+face C 000 001 100 101
+face D 010 011 110 111
+face E 000 010 100 110
+face F 001 011 101 111
+
+
+

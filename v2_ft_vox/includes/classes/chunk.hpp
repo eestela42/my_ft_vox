@@ -6,27 +6,18 @@
 #include "vec3.hpp"
 #endif
 
+#ifndef MESH_HPP
+# include "mesh.hpp"
+#endif
+
 namespace ee
 {
-
-
-
-
-typedef struct s_block_info
-{
-	ee::vec3 pos;
-	int normal;
-	int type;
-}		t_block_info;
-
-
-
 	class chunk
 	{
 		// private :
 		public :
 
-		char *data;
+		char 	*data;
 
 		std::vector<t_block_info> toVBO;
 		std::vector<t_triangle> triangles;
@@ -39,11 +30,14 @@ typedef struct s_block_info
 		public :
 
 		chunk();
+		chunk(int x, int y);
 		~chunk();
 
 		void fill();
-		void dataToVBO();
+		void dataToVBO(std::vector<vec3> &base_vertexes, std::vector<t_triangle> &triangles, std::vector<t_block_info> &toVBO);
 
+		void setPos(int x, int y);
+		
 		void setData(char *tmp);
 		char *getData();
 

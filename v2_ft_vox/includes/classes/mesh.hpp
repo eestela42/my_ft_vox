@@ -11,6 +11,12 @@
 
 namespace ee
 {
+typedef struct s_block_info
+{
+	ee::vec3 pos;
+	int normal;
+	int type;
+}		t_block_info;
 
 class mesh
 {

@@ -7,10 +7,16 @@
 // # include "mesh.hpp"
 # include "../types.hpp"
 
-
+#ifndef MESH_HPP
+# include "mesh.hpp"
+#endif
 
 namespace ee
 {
+
+	
+
+
 class game
 {
 private:
@@ -22,12 +28,16 @@ private:
 	unsigned int VBO, VAO, EBO;
 	unsigned int shaderProgram;
 	unsigned int texture;
-	ee::chunk chunk;
+	
 
 	
 
 
 public:
+	std::vector<chunk> chunks;
+	std::vector<vec3> base_vertexes;
+	std::vector<t_block_info> toVBO;
+	std::vector<t_triangle> triangles;
 	~game();
 	game(/* args */);
 	game(int width, int height);

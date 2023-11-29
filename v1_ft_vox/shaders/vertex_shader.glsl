@@ -19,6 +19,6 @@ void main()
     
 	gl_Position = modelView * vec4(aPos / zoom, 1.0);
 	
-	vec3 colors[2] = vec3[2]( vec3(1.0, 1.0, 1.0), vec3(0.0, 0.0, 0.0));
+	vec3 colors[2] = vec3[2](vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 	ourColor = colors[block_type];
 }

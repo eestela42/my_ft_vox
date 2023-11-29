@@ -65,11 +65,24 @@ float	vec3::getz() const
 	return (this->z);
 }
 
+glm::vec3		vec3::toGlm() const
+{
+	return (glm::vec3(this->x, this->y, this->z));
+}
+
 vec3&	vec3::operator=(const vec3 &rhs) 
 {
 	this->x = rhs.x;
 	this->y = rhs.y;
 	this->z = rhs.z;
+	return (*this);
+}
+
+vec3& 	vec3::operator=(const glm::vec3* rhs)
+{
+	this->x = rhs->x;
+	this->y = rhs->y;
+	this->z = rhs->z;
 	return (*this);
 }
 

@@ -7,7 +7,7 @@ using namespace ee;
 int zoom = 0;
 
 double fps = 0.0;
-bool rotate = false;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                bool rotate = true;
 bool color = true;
 
 bool rotate_p = false;
@@ -19,9 +19,6 @@ vec3 ctrl_time = 0.1f;
 mat4 ctrl_rotaX(1.0f);
 mat4 ctrl_rotaY(1.0f);
 mat4 ctrl_rotaZ(1.0f);
-
-vec3 position = vec3(0.0f, 0.0f, 0.0f);
-
 
 void processInput(GLFWwindow *window)
 {
@@ -76,16 +73,6 @@ void processInput(GLFWwindow *window)
 		ctrl_rotaZ.rotate(ctrl_time[2] * 30.0f, 0.0f, 0.0f, 1.0f);
 		ctrl_time[2] -= 0.01f;
 	}
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		position.x += 0.1f;
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		position.x -= 0.1f;
-
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		position.y += 0.1f;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		position.y -= 0.1f;
 
 
 
@@ -168,10 +155,9 @@ int main(int ac, char** av)
 	// glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model.getValue());
 
 
-	
 	mat4 view(1.0f);
 
-	position = vec3(0.0f, 0.0f, game.getChunk().size_z / 2 + 1);
+	view.translate(0.0f, 0.0f, -3.0f);
 	
 	
 	// unsigned int viewLoc = glGetUniformLocation(game.getShaderProgram(), "view");
@@ -198,7 +184,6 @@ int main(int ac, char** av)
 	mat4 const_rota(1.0f);
  	while(!glfwWindowShouldClose(game.getWindow()))
 	{
-		view = glm::lookAt(position.toGlm(), glm::vec3(10000.0f, 0.0, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		auto current_time = clock.now();
         std::chrono::duration<double> frame_duration = current_time - last_frame_time;
         last_frame_time = current_time;
