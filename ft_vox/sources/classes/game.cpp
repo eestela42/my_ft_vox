@@ -201,7 +201,7 @@ int game::initBuffers()
     glBindVertexArray(VAO);
 	
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, this->vertexes.size() * 6 * sizeof(int), &this->vertexes[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, this->vertexes.size() * sizeof(int), &this->vertexes[0], GL_STATIC_DRAW);
 	// glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
