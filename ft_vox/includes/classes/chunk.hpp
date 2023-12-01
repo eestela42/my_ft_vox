@@ -42,7 +42,7 @@ typedef struct s_block_info
 
 		void fill();
 
-		void createVertex(std::vector<glm::vec3> &vertexes, glm::vec3 pos);
+		void createVertex(std::vector<glm::vec3> &vertexes, glm::vec3 pos, char type);
 		void createTrianglesFace(int start, std::vector<unsigned int> &triangles);
 		void parkour(std::vector<glm::vec3> &vertexes,std::vector<unsigned int> &triangles, bool *tab, int pos);
 		void dataToVBO(std::vector<glm::vec3> &vertexes, std::vector<unsigned int> &triangles);

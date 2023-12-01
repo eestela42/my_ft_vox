@@ -44,13 +44,16 @@ void chunk::fill()
 
 
 */
-void chunk::createVertex(std::vector<glm::vec3> &vertexes, glm::vec3 pos)
+void chunk::createVertex(std::vector<glm::vec3> &vertexes, glm::vec3 pos, char type)
 {
 	pos.x += this->pos_x * this->size_x;
 	pos.y += this->pos_y * this->size_y;
 	vertexes.push_back(pos);
 	vertexes.push_back(glm::vec3(0.0f));
-	vertexes.push_back(glm::vec3(1.0f));
+	if (type == 1)
+		vertexes.push_back(glm::vec3(0.0f));
+	else
+		vertexes.push_back(glm::vec3(1.0f));
 }
 
 void chunk::createTrianglesFace(int start, std::vector<unsigned int> &triangles)
@@ -73,60 +76,61 @@ void chunk::parkour(std::vector<glm::vec3> &vertexes,std::vector<unsigned int> &
 	int x = pos % this->size_x;
 	int y = (pos / this->size_x) % this->size_y;
 	int z = pos / (this->size_x * this->size_y);
+	char type = this->data[pos];
 	if ( x == size_x - 1 || data[pos + 1] == 0)
 	{
 		createTrianglesFace(vertexes.size() / 3, triangles);
 
-		createVertex(vertexes, glm::vec3(x + 1, y, z));
-		createVertex(vertexes, glm::vec3(x + 1, y + 1, z));
-		createVertex(vertexes, glm::vec3(x + 1, y + 1, z + 1));
-		createVertex(vertexes, glm::vec3(x + 1, y, z + 1));
+		createVertex(vertexes, glm::vec3(x + 1, y, z), type);
+		createVertex(vertexes, glm::vec3(x + 1, y + 1, z), type);
+		createVertex(vertexes, glm::vec3(x + 1, y + 1, z + 1), type);
+		createVertex(vertexes, glm::vec3(x + 1, y, z + 1), type);
 	}
 	if (x == 0 || data[pos - 1] == 0)
 	{
 		createTrianglesFace(vertexes.size() / 3, triangles);
 
-		createVertex(vertexes, glm::vec3(x, y, z));
-		createVertex(vertexes, glm::vec3(x, y + 1, z));
-		createVertex(vertexes, glm::vec3(x, y + 1, z + 1));
-		createVertex(vertexes, glm::vec3(x, y, z + 1));
+		createVertex(vertexes, glm::vec3(x, y, z), type);
+		createVertex(vertexes, glm::vec3(x, y + 1, z), type);
+		createVertex(vertexes, glm::vec3(x, y + 1, z + 1), type);
+		createVertex(vertexes, glm::vec3(x, y, z + 1), type);
 
 	}
 	if (y == size_y - 1 || data[pos + this->size_x] == 0)
 	{
 		createTrianglesFace(vertexes.size() / 3, triangles);
 
-		createVertex(vertexes, glm::vec3(x, y + 1, z));
-		createVertex(vertexes, glm::vec3(x + 1, y + 1, z));
-		createVertex(vertexes, glm::vec3(x + 1, y + 1, z + 1));
-		createVertex(vertexes, glm::vec3(x, y + 1, z + 1));
+		createVertex(vertexes, glm::vec3(x, y + 1, z), type);
+		createVertex(vertexes, glm::vec3(x + 1, y + 1, z), type);
+		createVertex(vertexes, glm::vec3(x + 1, y + 1, z + 1), type);
+		createVertex(vertexes, glm::vec3(x, y + 1, z + 1), type);
 	}
 	if (y == 0 || data[pos - this->size_x] == 0)
 	{
 		createTrianglesFace(vertexes.size() / 3, triangles);
 
-		createVertex(vertexes, glm::vec3(x, y, z));
-		createVertex(vertexes, glm::vec3(x + 1, y, z));
-		createVertex(vertexes, glm::vec3(x + 1, y, z + 1));
-		createVertex(vertexes, glm::vec3(x, y, z + 1));
+		createVertex(vertexes, glm::vec3(x, y, z), type);
+		createVertex(vertexes, glm::vec3(x + 1, y, z), type);
+		createVertex(vertexes, glm::vec3(x + 1, y, z + 1), type);
+		createVertex(vertexes, glm::vec3(x, y, z + 1), type);
 	}
 	if (z == size_z - 1 || data[pos + this->size_x * this->size_y] == 0)
 	{
 		createTrianglesFace(vertexes.size() / 3, triangles);
 
-		createVertex(vertexes, glm::vec3(x, y, z + 1));
-		createVertex(vertexes, glm::vec3(x + 1, y, z + 1));
-		createVertex(vertexes, glm::vec3(x + 1, y + 1, z + 1));
-		createVertex(vertexes, glm::vec3(x, y + 1, z + 1));
+		createVertex(vertexes, glm::vec3(x, y, z + 1), type);
+		createVertex(vertexes, glm::vec3(x + 1, y, z + 1), type);
+		createVertex(vertexes, glm::vec3(x + 1, y + 1, z + 1), type);
+		createVertex(vertexes, glm::vec3(x, y + 1, z + 1), type);
 	}
 	if (z == 0 || data[pos - this->size_x * this->size_y] == 0)
 	{
 		createTrianglesFace(vertexes.size() / 3, triangles);
 
-		createVertex(vertexes, glm::vec3(x, y, z));
-		createVertex(vertexes, glm::vec3(x + 1, y, z));
-		createVertex(vertexes, glm::vec3(x + 1, y + 1, z));
-		createVertex(vertexes, glm::vec3(x, y + 1, z));
+		createVertex(vertexes, glm::vec3(x, y, z), type);
+		createVertex(vertexes, glm::vec3(x + 1, y, z), type);
+		createVertex(vertexes, glm::vec3(x + 1, y + 1, z), type);
+		createVertex(vertexes, glm::vec3(x, y + 1, z), type);
 	}
 	return;
 }
