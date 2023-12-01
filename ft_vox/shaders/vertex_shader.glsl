@@ -26,101 +26,85 @@ void main()
 	x += chunk_x * 32;
 	y += chunk_y * 32;
 
-	// vec3 points[4];
+	vec3 points[4];
 
 
     vec3 newPos;
-	if (point == 0)
-	{
-		ourColor = vec3(0.0, 0.0, 1.0);
-		newPos.x = 0;
-		newPos.y = 0 ;
-		newPos.z = 0;
+	// if (point == 0)
+	// {
+	// 	ourColor = vec3(0.0f, 0.0f, 1.0f);
+	// 	newPos = vec3(0.0f, 0.0f, 0.0f);
 
-		// newPos.x = x;
-		// newPos.y = z ;
-		// newPos.z = y;
-	}
-	else if (point == 1)
+	// }
+	// else if (point == 1)
+	// {
+	// 	ourColor = vec3(0.0, 1.0, 0.0);
+	// 	newPos = vec3(0.0f, 1.0f, 1.0f);
+	// }
+	// else if (face == 2)
+	// {
+	// 	ourColor = vec3(1.0, 1.0, 1.0);
+	// 	newPos = vec3(0.0f, 0.0f, 1.0f);
+		
+	// }
+	// else 
+	// {
+	// 	ourColor = vec3(1.0, 0.0, 0.0);
+	// 	newPos = vec3(0.0f, 1.0f, 0.0f);
+
+	// }
+	// est 0 west 1 nord 2 sud 3 haut 4 bas 5 
+	if (face == 3) // bot
 	{
-		ourColor = vec3(1.0, 0.0, 0.0);
-		newPos.x = 0;
-		newPos.y = 1 ;
-		newPos.z = 1;
-		// newPos.x = x;
-		// newPos.y = z + 1;
-		// newPos.z = y + 1;
+		points[0] = vec3(0.0, 0.0, 0.0);
+		points[1] = vec3(1.0, 0.0, 0.0);
+		points[2] = vec3(1.0, 1.0, 0.0);
+		points[3] =  vec3(0.0, 1.0, 0.0);
 	}
-	else if (point == 2)
+	else if (face == 2) // top
 	{
-		ourColor = vec3(1.0, 1.0, 1.0);
-		newPos.x = 0;
-		newPos.y = 0 ;
-		newPos.z = 1;
-		// newPos.x = x;
-		// newPos.y = z;
-		// newPos.z = y + 1;
+		points[0] = vec3(0.0, 0.0, 1.0);
+		points[1] = vec3(1.0, 0.0, 1.0);
+		points[2] = vec3(1.0, 1.0, 1.0);
+		points[3] =  vec3(0.0, 1.0, 1.0);
 	}
-	else 
+	else if (face == 1) // south
 	{
-		ourColor = vec3(0.0, 0.0, 0.0);
-		newPos.x = 0;
-		newPos.y = 1 ;
-		newPos.z = 0;
-		// newPos.x = x;
-		// newPos.y = z + 1;
-		// newPos.z = y;
+		points[0] = vec3(0.0, 0.0, 0.0);
+		points[1] = vec3(0.0, 0.0, 1.0);
+		points[2] = vec3(0.0, 1.0, 1.0);
+		points[3] = vec3(0.0, 1.0, 0.0);
+	}
+	else if (face == 0) // north
+	{
+		points[0] = vec3(1.0, 0.0, 0.0);
+		points[1] = vec3(1.0, 0.0, 1.0);
+		points[2] = vec3(1.0, 1.0, 1.0);
+		points[3] =  vec3(1.0, 1.0, 0.0);
+	}
+	else if (face == 5) // ouest
+	{
+		points[0] = vec3(0.0, 0.0, 0.0);
+		points[1] = vec3(1.0, 0.0, 0.0);
+		points[2] = vec3(1.0, 0.0, 1.0);
+		points[3] =  vec3(0.0, 0.0, 1.0);
+	}
+	else if (face == 4) // east
+	{
+		points[0] = vec3(0.0, 1.0, 0.0);
+		points[1] = vec3(1.0, 1.0, 0.0);
+		points[2] = vec3(1.0, 1.0, 1.0);
+		points[3] =  vec3(0.0, 1.0, 1.0);
 	}
 
-	// newPos.x = x + points[point].x;
-	// newPos.y = z + points[point].y;
-	// newPos.z = y + points[point].z;
+	newPos.x = x + points[point].x;
+	newPos.y = z + points[point].y;
+	newPos.z = y + points[point].z;
 	gl_Position = modelView * vec4(newPos, 1.0);
 	
-	// vec3 colors[2] = vec3[2](vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
-	// ourColor = colors[type % 2];
+	vec3 colors[2] = vec3[2](vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
+	ourColor = colors[type % 2];
 	// ourColor = vec3(0.0, 0.0, 0.0);
 }
 
-	// if (face == 0) // bot
-	// {
-	// 	points[0] = vec3(0.0, 0.0, 0.0);
-	// 	points[1] = vec3(1.0, 0.0, 0.0);
-	// 	points[2] = vec3(1.0, 1.0, 0.0);
-	// 	points[3] =  vec3(0.0, 1.0, 0.0);
-	// }
-	// else if (face == 1) // top
-	// {
-	// 	points[0] = vec3(0.0, 0.0, 1.0);
-	// 	points[1] = vec3(1.0, 0.0, 1.0);
-	// 	points[2] = vec3(1.0, 1.0, 1.0);
-	// 	points[3] =  vec3(0.0, 1.0, 1.0);
-	// }
-	// else if (face == 2) // south
-	// {
-	// 	points[0] = vec3(0.0, 0.0, 0.0);
-	// 	points[1] = vec3(0.0, 0.0, 1.0);
-	// 	points[2] = vec3(0.0, 1.0, 1.0);
-	// 	points[3] = vec3(0.0, 1.0, 0.0);
-	// }
-	// else if (face == 3) // north
-	// {
-	// 	points[0] = vec3(1.0, 0.0, 0.0);
-	// 	points[1] = vec3(1.0, 0.0, 1.0);
-	// 	points[2] = vec3(1.0, 1.0, 1.0);
-	// 	points[3] =  vec3(1.0, 1.0, 0.0);
-	// }
-	// else if (face == 4) // ouest
-	// {
-	// 	points[0] = vec3(0.0, 0.0, 0.0);
-	// 	points[1] = vec3(1.0, 0.0, 0.0);
-	// 	points[2] = vec3(1.0, 0.0, 1.0);
-	// 	points[3] =  vec3(0.0, 0.0, 1.0);
-	// }
-	// else // east
-	// {
-	// 	points[0] = vec3(0.0, 1.0, 0.0);
-	// 	points[1] = vec3(1.0, 1.0, 0.0);
-	// 	points[2] = vec3(1.0, 1.0, 1.0);
-	// 	points[3] =  vec3(0.0, 1.0, 1.0);
-	// }
+	

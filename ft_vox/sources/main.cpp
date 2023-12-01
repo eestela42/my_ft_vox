@@ -146,20 +146,10 @@ int main(int ac, char** av)
 	// 	std::cout << game.triangles[i] << " " << game.triangles[i+1] << " " << game.triangles[i+2] << " - ";
 	// std::cout << std::endl;
 
-	std::cout << "vertexes.size() : " << game.vertexes.size() / 6 << std::endl;
-	std::cout << "triangles.size() : " << game.triangles.size() / 3 << std::endl;
-
-	for (int i = 0; i <  game.vertexes.size(); i+=6)
-	{
-		std::cout << "vertexes : " << game.vertexes[i] << " " << game.vertexes[i + 1] << " " << game.vertexes[i + 2] << " " << game.vertexes[i + 3] << " " << game.vertexes[i + 4] << " " << game.vertexes[i + 5] << std::endl;
-	}
-	for (int i = 0; i <  game.triangles.size(); i+=3)
-	{
-		std::cout << "triangles : " << game.triangles[i] << " " << game.triangles[i + 1] << " " << game.triangles[i + 2] << std::endl;
-	}
+	
 
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
  	while(!glfwWindowShouldClose(game.getWindow()))
 	{
@@ -203,11 +193,14 @@ int main(int ac, char** av)
 		unsigned int modelViewLoc = glGetUniformLocation(game.getShaderProgram(), "modelView");
 		glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, &modelView[0][0]);
 
-		
 		glDrawElements(GL_TRIANGLES, game.triangles.size(), GL_UNSIGNED_INT, 0);
 		// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(game.getWindow());
+		GLenum error = glGetError();
+		if (error != GL_NO_ERROR) {
+			std::cout << "error : " << error << std::endl;
+		}
 		
     } 
 

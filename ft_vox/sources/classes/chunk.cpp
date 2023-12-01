@@ -23,18 +23,22 @@ void chunk::fill()
 {
 	for (int i = 0; i < this->size_x * this->size_y * this->size_z; i++)
 		this->data[i] = 0;
-	// char block_type[2] = {1, 2};
-	// for (int z = 0; z < 10; z++)
-	// {
-	// 	for (int y = 0; y < size_y; y++)
-	// 	{
-	// 		for (int x = 0; x < size_x; x++)
-	// 		{
-	// 			this->data[x + y * this->size_x + z * this->size_x * this->size_y] = block_type[(x % 2 + y % 2 + z % 2) % 2];
-	// 		}
-	// 	}
-	// }
-	this->data[0] = 1;
+	char block_type[2] = {1, 2};
+	for (int z = 0; z < 4; z++)
+	{
+		for (int y = 0; y < size_y; y++)
+		{
+			for (int x = 0; x < size_x; x++)
+			{
+				this->data[x + y * this->size_x + z * this->size_x * this->size_y] = block_type[(x % 2 + y % 2 + z % 2) % 2];
+			}
+		}
+	}
+	// this->data[0] = 1;
+	// this->data[1] = 2;
+	// this->data[size_x] = 2;
+	// this->data[size_x + 1] = 1;
+
 }
 
 
