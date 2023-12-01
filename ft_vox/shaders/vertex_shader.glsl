@@ -19,9 +19,9 @@ uniform float zoom;
 void main()
 {
 	int pos_block = pos;
-	int x = pos_block % 32;
-	int y = (pos_block % 1024) / 32;
-	int z = pos_block / 1024;
+	float x = pos_block % 32;
+	float y = (pos_block % 1024) / 32;
+	float z = pos_block / 1024;
 
 	x += chunk_x * 32;
 	y += chunk_y * 32;
@@ -32,33 +32,33 @@ void main()
     vec3 newPos;
 	if (point == 0)
 	{
-		newPos.x = x + 1;
+		newPos.x = x;
 		newPos.y = z ;
 		newPos.z = y;
 	}
-	if (point == 1)
+	else if (point == 1)
 	{
-		newPos.x = x + 1;
+		newPos.x = x;
 		newPos.y = z + 1;
-		newPos.z = y  ;
-	}
-	if (point == 2)
-	{
-		newPos.x = x  + 1;
-		newPos.y = z  + 1;
 		newPos.z = y + 1;
 	}
-	if (point == 3)
+	else if (point == 2)
 	{
-		newPos.x = x + 1;
+		newPos.x = x;
 		newPos.y = z;
 		newPos.z = y + 1;
+	}
+	else 
+	{
+		newPos.x = x;
+		newPos.y = z + 1;
+		newPos.z = y;
 	}
 
 	// newPos.x = x + points[point].x;
 	// newPos.y = z + points[point].y;
 	// newPos.z = y + points[point].z;
-	gl_Position = modelView * vec4(newPos / zoom, 1.0);
+	gl_Position = modelView * vec4(newPos, 1.0);
 	
 	// vec3 colors[2] = vec3[2](vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 	// ourColor = colors[type % 2];

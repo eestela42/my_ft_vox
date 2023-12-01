@@ -87,7 +87,7 @@ int game::init()
 	// }
 
 
-std::cout << "vertexes size " << this->vertexes.size() / 3 << std::endl;	
+std::cout << "vertexes size " << this->vertexes.size() / 6 << std::endl;	
 std::cout << "triangles size " << this->triangles.size() / 3 << std::endl;
 
 
