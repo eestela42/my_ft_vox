@@ -34,11 +34,7 @@ void chunk::fill()
 			}
 		}
 	}
-	// this->data[0] = 1;
-	// this->data[1] = 2;
-	// this->data[size_x] = 2;
-	// this->data[size_x + 1] = 1;
-
+	this->data[0] = 1;
 }
 
 

@@ -14,6 +14,61 @@ bool color_p = false;
 
 glm::vec3 cameraPos = glm::vec3(-2.0f, 0.0f, 0.0f);
 
+glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f); 
+glm::vec3 cameraRight = glm::normalize(glm::cross(cameraUp, cameraDirection));
+
+glm::vec3 cameraFront = glm::vec3(1.0f, 0.0f, 0.0f);
+
+float cameraSpeed = 0.05f;
+
+float yaw = 0.0f;
+float pitch = 0.0f;
+
+glm::vec3 direction = glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
+								sin(glm::radians(pitch)),
+								sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
+
+bool firstMouse = true;
+float lastX = 400, lastY = 300;
+
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (firstMouse) // initially set to true
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // reversed since y-coordinates range from bottom to top
+	lastX = xpos;
+	lastY = ypos;
+
+	const float sensitivity = 0.1f;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	yaw   += xoffset;
+	pitch += yoffset; 
+
+	if(pitch > 89.0f)
+		pitch =  89.0f;
+	if(pitch < -89.0f)
+		pitch = -89.0f;
+	direction;
+	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	direction.y = sin(glm::radians(pitch));
+	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	cameraFront = glm::normalize(direction);
+	
+}
+
+
 
 void processInput(GLFWwindow *window)
 {
@@ -26,11 +81,10 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		std::cout << "fps : " << fps << std::endl;
 
-	zoom = 0;
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		zoom = -1;
-	else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		zoom = 1;
+	cameraSpeed = 0.05f;
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		cameraSpeed = 1.0f;
+	
 
 
 	if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS && !color_p)
@@ -41,20 +95,33 @@ void processInput(GLFWwindow *window)
 	else if (glfwGetKey(window, GLFW_KEY_C) == GLFW_RELEASE && color_p)
 		color_p = 0;
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPos.x += 0.1f;
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPos.x -= 0.1f;
-
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraPos.z -= 0.1f;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraPos.z += 0.1f;
-
+	 if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        cameraPos += cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        cameraPos -= cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+       cameraPos += glm:: normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		cameraPos.y -= 0.1f;
+        cameraPos += cameraSpeed * cameraUp;
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		cameraPos.y += 0.1f;
+		cameraPos -= cameraSpeed * cameraUp;
+
+	// if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	// 	cameraPos.x += 0.1f;
+	// if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	// 	cameraPos.x -= 0.1f;
+
+	// if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	// 	cameraPos.z -= 0.1f;
+	// if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	// 	cameraPos.z += 0.1f;
+
+	// if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+	// 	cameraPos.y -= 0.1f;
+	// if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+	// 	cameraPos.y += 0.1f;
 }
 
 
@@ -109,13 +176,7 @@ int main(int ac, char** av)
 
  
 
-	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f); 
-	glm::vec3 cameraRight = glm::normalize(glm::cross(cameraUp, cameraDirection));
-
-	glm::vec3 cameraFront = glm::vec3(1.0f, 0.0f, 0.0f);
+	
 
 	glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
@@ -125,7 +186,7 @@ int main(int ac, char** av)
 
 	glm::mat4 projection;
 
-	projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
+	projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 350.0f);
 	
 	
 
@@ -138,18 +199,22 @@ int main(int ac, char** av)
 	// glEnable(GL_CULL_FACE);  
 	// glCullFace(GL_BACK); 
 
-	// std::cout << "in main vertexes : " << std::endl;
-	// for (int i = 0; i < game.vertexes.size(); i+=3)
-	// 	std::cout << game.vertexes[i][0] << " " << game.vertexes[i][1] << " " << game.vertexes[i][2] << "  - ";
-	// std::cout << std::endl << "triangles : " << std::endl;
-	// for (int i = 0; i < game.triangles.size(); i+=3)
-	// 	std::cout << game.triangles[i] << " " << game.triangles[i+1] << " " << game.triangles[i+2] << " - ";
-	// std::cout << std::endl;
+	std::cout << "in main vertexes : " << std::endl;
+	for (int i = 0; i < game.vertexes.size(); i+=3)
+		std::cout << game.vertexes[i][0] << " " << game.vertexes[i][1] << " " << game.vertexes[i][2] << "  - ";
+	std::cout << std::endl << "triangles : " << std::endl;
+	for (int i = 0; i < game.triangles.size(); i+=3)
+		std::cout << game.triangles[i] << " " << game.triangles[i+1] << " " << game.triangles[i+2] << " - ";
+	std::cout << std::endl;
 
-	
 
 
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glfwSetInputMode(game.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	glfwSetCursorPosCallback(game.getWindow(), mouse_callback);
+
+	
 
  	while(!glfwWindowShouldClose(game.getWindow()))
 	{
