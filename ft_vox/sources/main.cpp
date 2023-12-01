@@ -138,13 +138,13 @@ int main(int ac, char** av)
 	// glEnable(GL_CULL_FACE);  
 	// glCullFace(GL_BACK); 
 
-	// std::cout << "in main vertexes : " << std::endl;
-	// for (int i = 0; i < game.vertexes.size(); i+=3)
-	// 	std::cout << game.vertexes[i][0] << " " << game.vertexes[i][1] << " " << game.vertexes[i][2] << "  - ";
-	// std::cout << std::endl << "triangles : " << std::endl;
-	// for (int i = 0; i < game.triangles.size(); i+=3)
-	// 	std::cout << game.triangles[i] << " " << game.triangles[i+1] << " " << game.triangles[i+2] << " - ";
-	// std::cout << std::endl;
+	std::cout << "in main vertexes : " << std::endl;
+	for (int i = 0; i < game.vertexes.size(); i+=3)
+		std::cout << game.vertexes[i][0] << " " << game.vertexes[i][1] << " " << game.vertexes[i][2] << "  - ";
+	std::cout << std::endl << "triangles : " << std::endl;
+	for (int i = 0; i < game.triangles.size(); i+=3)
+		std::cout << game.triangles[i] << " " << game.triangles[i+1] << " " << game.triangles[i+2] << " - ";
+	std::cout << std::endl;
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 

@@ -50,7 +50,7 @@ int game::init()
 	}
 
 
-		int size = 5;
+		int size = 1;
 		this->chunks = new ee::chunk[size * size];
 		for (int y = 0; y < size; y++)
 		{
