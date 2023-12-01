@@ -31,7 +31,7 @@ public:
 
 	ee::chunk 	*chunks;
 	ee::chunk 				chunk;
-	std::vector<glm::vec3> vertexes;
+	std::vector<int> vertexes;
 	std::vector<unsigned int> triangles;
 
 	~game();

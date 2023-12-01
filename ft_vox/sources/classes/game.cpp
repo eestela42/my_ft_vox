@@ -50,7 +50,7 @@ int game::init()
 	}
 
 
-		int size = 5;
+		int size = 1;
 		this->chunks = new ee::chunk[size * size];
 		for (int y = 0; y < size; y++)
 		{
@@ -61,7 +61,15 @@ int game::init()
 				this->chunks[x + y * size].dataToVBO(this->vertexes, this->triangles);
 			}
 		}
-
+		std::cout << " chunk_x chunk_x pos face type point" << std::endl;
+	for (int i = 0; i < vertexes.size(); i+=6)
+	{
+		std::cout << "vertexes : " << vertexes[i] << " " << vertexes[i + 1] << " " << vertexes[i + 2] << " " << vertexes[i + 3] << " " << vertexes[i + 4] << " " << vertexes[i + 5] << std::endl;
+	}
+	for (int i = 0; i < triangles.size(); i+=3)
+	{
+		std::cout << "triangles : " << triangles[i] << " " << triangles[i + 1] << " " << triangles[i + 2] << std::endl;
+	}
 
 		// this->chunk.fill();
 		// this->chunk.dataToVBO(vertexes, triangles);
@@ -80,7 +88,7 @@ int game::init()
 
 
 std::cout << "vertexes size " << this->vertexes.size() / 3 << std::endl;	
-std::cout << "triangles size " << this->triangles.size() << std::endl;
+std::cout << "triangles size " << this->triangles.size() / 3 << std::endl;
 
 
 
@@ -193,7 +201,7 @@ int game::initBuffers()
     glBindVertexArray(VAO);
 	
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, this->vertexes.size() * 3 * sizeof(float), &this->vertexes[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, this->vertexes.size() * 6 * sizeof(int), &this->vertexes[0], GL_STATIC_DRAW);
 	// glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -201,12 +209,18 @@ int game::initBuffers()
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 1, GL_INT, GL_FALSE, 6 * sizeof(int), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * 3 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 1, GL_INT, GL_FALSE, 6 * sizeof(int), (void*)(1 * sizeof(int)));
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * 3 * sizeof(float), (void*)(3 * 2 * sizeof(float)));
+	glVertexAttribPointer(2, 1, GL_INT, GL_FALSE, 6 * sizeof(int), (void*)(2 * sizeof(int)));
 	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(3, 1, GL_INT, GL_FALSE, 6 * sizeof(int), (void*)(3 * sizeof(int)));
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(4, 1, GL_INT, GL_FALSE, 6 * sizeof(int), (void*)(4 * sizeof(int)));
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(5, 1, GL_INT, GL_FALSE, 6 * sizeof(int), (void*)(5 * sizeof(int)));
+	glEnableVertexAttribArray(5);
 
 	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     glBindVertexArray(0); 
