@@ -24,7 +24,7 @@ void chunk::fill()
 	for (int i = 0; i < this->size_x * this->size_y * this->size_z; i++)
 		this->data[i] = 0;
 	char block_type[2] = {1, 2};
-	for (int z = 0; z < 4; z++)
+	for (int z = 0; z < 64; z++)
 	{
 		for (int y = 0; y < size_y; y++)
 		{
