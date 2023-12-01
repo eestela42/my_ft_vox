@@ -50,21 +50,21 @@ int game::init()
 	}
 
 
-		int size = 1;
-		this->chunks = new ee::chunk[size * size];
-		for (int y = 0; y < size; y++)
-		{
-			for (int x = 0; x < size; x++)
-			{		
-				this->chunks[x + y * size].setPos(x, y);
-				this->chunks[x + y * size].fill();
-				this->chunks[x + y * size].dataToVBO(this->vertexes, this->triangles);
-			}
+	int size = 1;
+	this->chunks = new ee::chunk[size * size];
+	for (int y = 0; y < size; y++)
+	{
+		for (int x = 0; x < size; x++)
+		{		
+			this->chunks[x + y * size].setPos(x, y);
+			this->chunks[x + y * size].fill();
+			this->chunks[x + y * size].dataToVBO(this->vertexes, this->triangles);
 		}
-		std::cout << " chunk_x chunk_x pos face type point" << std::endl;
+	}
+	std::cout << " chunk_x chunk_x pos face type point" << std::endl;
 	for (int i = 0; i < vertexes.size(); i+=6)
 	{
-		std::cout << "vertexes : " << vertexes[i] << " " << vertexes[i + 1] << " " << vertexes[i + 2] << " " << vertexes[i + 3] << " " << vertexes[i + 4] << " " << vertexes[i + 5] << std::endl;
+		std::cout << "vertexes : " << (int)vertexes[i] << " " << (int)vertexes[i + 1] << " " << (int)vertexes[i + 2] << " " << (int)vertexes[i + 3] << " " << (int)vertexes[i + 4] << " " << (int)vertexes[i + 5] << std::endl;
 	}
 	for (int i = 0; i < triangles.size(); i+=3)
 	{
@@ -199,13 +199,23 @@ int game::initBuffers()
     glGenBuffers(1, &EBO);
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(VAO);
+	std::cout << "VBO chunk_x chunk_x pos face type point" << std::endl;
+	for (int i = 0; i < vertexes.size(); i+=6)
+	{
+		std::cout << "vertexes : " << (int)vertexes[i] << " " << (int)vertexes[i + 1] << " " << (int)vertexes[i + 2] << " " << (int)vertexes[i + 3] << " " << (int)vertexes[i + 4] << " " << (int)vertexes[i + 5] << std::endl;
+	}
+	for (int i = 0; i < triangles.size(); i+=3)
+	{
+		std::cout << "triangles : " << triangles[i] << " " << triangles[i + 1] << " " << triangles[i + 2] << std::endl;
+	}
 	
+	std::cout << "size of int " << sizeof(int) << std::endl;
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, this->vertexes.size() * sizeof(int), &this->vertexes[0], GL_STATIC_DRAW);
 	// glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->triangles.size() * sizeof(int), &this->triangles[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->triangles.size() * sizeof(u_int), &this->triangles[0], GL_STATIC_DRAW);
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // position attribute

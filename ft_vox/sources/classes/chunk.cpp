@@ -144,8 +144,8 @@ void chunk::dataToVBO(std::vector<int> &vertexes, std::vector<unsigned int> &tri
 	triangles.reserve(triangles.size() + this->triangles.size());
 	triangles.insert(triangles.end(), this->triangles.begin(), this->triangles.end());
 
-	std::cout << "vertexes.size() : " << vertexes.size() << std::endl;
-	std::cout << "triangles.size() : " << triangles.size() << std::endl;
+	std::cout << "vertexes.size() : " << vertexes.size() / 6 << std::endl;
+	std::cout << "triangles.size() : " << triangles.size() / 3 << std::endl;
 }
 
 

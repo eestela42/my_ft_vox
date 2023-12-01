@@ -26,33 +26,50 @@ void main()
 	x += chunk_x * 32;
 	y += chunk_y * 32;
 
-	vec3 points[4];
+	// vec3 points[4];
 
 
     vec3 newPos;
 	if (point == 0)
 	{
-		newPos.x = x;
-		newPos.y = z ;
-		newPos.z = y;
+		ourColor = vec3(0.0, 0.0, 1.0);
+		newPos.x = 0;
+		newPos.y = 0 ;
+		newPos.z = 0;
+
+		// newPos.x = x;
+		// newPos.y = z ;
+		// newPos.z = y;
 	}
 	else if (point == 1)
 	{
-		newPos.x = x;
-		newPos.y = z + 1;
-		newPos.z = y + 1;
+		ourColor = vec3(1.0, 0.0, 0.0);
+		newPos.x = 0;
+		newPos.y = 1 ;
+		newPos.z = 1;
+		// newPos.x = x;
+		// newPos.y = z + 1;
+		// newPos.z = y + 1;
 	}
 	else if (point == 2)
 	{
-		newPos.x = x;
-		newPos.y = z;
-		newPos.z = y + 1;
+		ourColor = vec3(1.0, 1.0, 1.0);
+		newPos.x = 0;
+		newPos.y = 0 ;
+		newPos.z = 1;
+		// newPos.x = x;
+		// newPos.y = z;
+		// newPos.z = y + 1;
 	}
 	else 
 	{
-		newPos.x = x;
-		newPos.y = z + 1;
-		newPos.z = y;
+		ourColor = vec3(0.0, 0.0, 0.0);
+		newPos.x = 0;
+		newPos.y = 1 ;
+		newPos.z = 0;
+		// newPos.x = x;
+		// newPos.y = z + 1;
+		// newPos.z = y;
 	}
 
 	// newPos.x = x + points[point].x;
@@ -62,7 +79,7 @@ void main()
 	
 	// vec3 colors[2] = vec3[2](vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 	// ourColor = colors[type % 2];
-	ourColor = vec3(0.0, 0.0, 0.0);
+	// ourColor = vec3(0.0, 0.0, 0.0);
 }
 
 	// if (face == 0) // bot
