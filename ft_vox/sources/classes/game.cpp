@@ -63,36 +63,10 @@ int game::init()
 	}
 	
 
-		// this->chunk.fill();
-		// this->chunk.dataToVBO(vertexes, triangles);
-	
 
-	// this->mesh = ee::mesh("../../scop/resources_42/42.obj");
+	std::cout << "vertexes size " << this->vertexes.size() / 6 << std::endl;	
+	std::cout << "triangles size " << this->triangles.size() / 3 << std::endl;
 
-	// this->vertexes = this->mesh.vertexes;
-	// this->triangles.reserve(this->mesh.triangles.size()*3);
-	// for (std::vector<t_triangle>::iterator it = this->mesh.triangles.begin(); it != this->mesh.triangles.end(); ++it)
-	// {
-	// 	this->triangles.push_back(it->v[0]);
-	// 	this->triangles.push_back(it->v[1]);
-	// 	this->triangles.push_back(it->v[2]);
-	// }
-
-
-std::cout << "vertexes size " << this->vertexes.size() / 6 << std::endl;	
-std::cout << "triangles size " << this->triangles.size() / 3 << std::endl;
-
-
-
-
-// std::cout << "vertexes : " << std::endl;
-// for (int i = 0; i < this->vertexes.size(); i+=3)
-// 	std::cout << this->vertexes[i][0] << " " << this->vertexes[i][1] << " " << this->vertexes[i][2] << "  - ";
-// std::cout << std::endl << "triangles : " << std::endl;
-// for (int i = 0; i < this->triangles.size(); i+=3)
-// 	std::cout << this->triangles[i]<< " " << this->triangles[i+1] << " " << this->triangles[i+2] << " - ";
-
-std::cout << std::endl;
 
 	glfwMakeContextCurrent(this->window);
 	this->updateIsRunning(true);
