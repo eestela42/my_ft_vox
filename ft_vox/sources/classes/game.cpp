@@ -67,7 +67,7 @@ int game::init()
 
 int game::initChunks()
 {
-	int size = 15;
+	int size = 5;
 	this->chunks = new ee::chunk[size * size];
 	ee::RLE bp = ee::RLE(chunks[0].size_x, chunks[0].size_y, 20);
 	bp.print();
