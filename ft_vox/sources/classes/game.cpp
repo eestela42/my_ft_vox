@@ -60,7 +60,6 @@ int game::init()
 	int monitor = 0;
 
 	glfwSetWindowMonitor(this->window, glfwGetMonitors(&monitor)[monitor - 1], 0, 0, this->screenWidth, this->screenHeight, GLFW_DONT_CARE);
-	std::cout << "monitor value = " << monitor << std::endl;
 	
 	
 	return (0);
@@ -68,17 +67,37 @@ int game::init()
 
 int game::initChunks()
 {
-	int size = 5;
+	int size = 15;
 	this->chunks = new ee::chunk[size * size];
+	ee::RLE bp = ee::RLE(chunks[0].size_x, chunks[0].size_y, 20);
+	bp.print();
+	u_char *tmp = bp.createDataFromRle();
+	for (int i = 0; i < 32*32*255; i++)
+	{
+		std::cout << (int)tmp[i] << " ";
+		if (i % 32 == 0)
+			std::cout << std::endl;
+	}
+
 	for (int y = 0; y < size; y++)
 	{
 		for (int x = 0; x < size; x++)
-		{		
+		{	
+			std::cout << "x = " << x << " y = " << y << " time " << glfwGetTime() << std::endl;
+
 			this->chunks[x + y * size].setPos(x, y);
-			this->chunks[x + y * size].fill();
-			this->chunks[x + y * size].dataToVBO(this->vertexes, this->triangles);
+			this->chunks[x + y * size].setRle(bp);
+
+			this->chunks[x + y * size].setData(bp.createDataFromRle());
+
+			this->chunks[x + y * size].rleToVbo(this->vertexes, this->triangles);
+
+			// this->chunks[x + y * size].fill();
+			// this->chunks[x + y * size].dataToVBO(this->vertexes, this->triangles);
 		}
 	}
+	// displayVBO();
+	// displayEBO();
 	return (0);
 }
 
@@ -327,19 +346,7 @@ float* game::vbo_to_vertexes()
 	return (tmp);
 }
 
-unsigned int* game::ebo_to_indices()
-{
-	unsigned int *tmp = new unsigned int[this->mesh.triangles.size() * 3];
-	int i = 0;
-	for	(std::vector<t_triangle>::iterator it = this->mesh.triangles.begin(); it != this->mesh.triangles.end(); ++it)
-	{
-		tmp[i] = it->v[0];
-		tmp[i + 1] = it->v[1];
-		tmp[i + 2] = it->v[2];
-		i += 3;
-	}
-	return (tmp);
-}
+
 
 
 void game::setBool(const std::string &name, bool value) const
@@ -355,19 +362,21 @@ void game::setFloat(const std::string &name, float value) const
     glUniform1f(glGetUniformLocation(this->shaderProgram, name.c_str()), value); 
 }
 
-void game::displayEBO()
-{
-	for (std::vector<t_triangle>::iterator it = this->mesh.triangles.begin(); it != this->mesh.triangles.end(); ++it)
-	{
-		std::cout << it->v[0] << " " << it->v[1] << " " << it->v[2] << std::endl;
-	}
-}
+
 
 void game::displayVBO()
 {
-	for (std::vector<glm::vec3>::iterator it = this->mesh.vertexes.begin(); it != this->mesh.vertexes.end(); ++it)
+	for (int i  = 0; i < this->vertexes.size(); i+=4)
 	{
-		std::cout << (*it)[0] << " " << (*it)[1] << " " << (*it)[2] << std::endl;
+		std::cout << "vert " << i << " : "<<vertexes[i] << " " << this->vertexes[i + 1] << " " << this->vertexes[i + 2] << " " << this->vertexes[i + 3] << std::endl;
+	}
+}
+
+void game::displayEBO()
+{
+	for (int i = 0; i < this->triangles.size(); i+=3)
+	{
+		std::cout << "tri " << i << " : "<<triangles[i] << " " << this->triangles[i + 1] << " " << this->triangles[i + 2] << std::endl;
 	}
 }
 

@@ -2,9 +2,6 @@
 # define GAME_HPP
 
 # include "../base_header.hpp"
-// # include "vec3.hpp"
-// # include "mat4.hpp"
-// # include "mesh.hpp"
 # include "../types.hpp"
 
 

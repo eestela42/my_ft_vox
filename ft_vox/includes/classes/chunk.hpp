@@ -3,13 +3,12 @@
 
 # include "../base_header.hpp"
 
+# ifndef RLE_HPP
+#  include "RLE.hpp"
+# endif
+
 namespace ee
 {
-
-
-
-
-
 
 
 	class chunk
@@ -18,6 +17,8 @@ namespace ee
 		public :
 
 		u_char *data;
+		ee::RLE rle;
+		
 		std::vector<unsigned int> triangles;
 		std::vector<int> vertexes;
 		int size_x = 32;
@@ -28,26 +29,32 @@ namespace ee
 
 		public :
 
+		~chunk();
 		chunk();
 		chunk(int x, int y);
-		~chunk();
+		chunk(int x, int y, ee::RLE &other);
 
 		void fill();
 
 		void createVertex(std::vector<int> &vertexes, glm::vec3 pos);
-		void createPointVertex(std::vector<int> &vertexes, int pos, char orientation, char type);
+		void createPointVertex(std::vector<int> &vertexes, int pos, char orientation, u_char type);
 
 
 		void createTrianglesFace(int start, std::vector<unsigned int> &triangles);
 		void parkour(int start_vert, std::vector<int> &vertexes,std::vector<unsigned int> &triangles, bool *tab, int pos);
+		
 		void dataToVBO(std::vector<int> &vertexes, std::vector<unsigned int> &triangles);
+		void rleToVbo(std::vector<int> &vertexes, std::vector<unsigned int> &triangles);
 
 		void setPos(int x, int y);
 		int getPos_x();
 		int getPos_y();
 
-		void setData(u_char *tmp);
+		bool setData(u_char *tmp);
 		u_char *getData();
+
+		void	setRle(ee::RLE &other);
+		ee::RLE&	getRle();
 
 		void* getToVBO();
 		int memoryToVBO();

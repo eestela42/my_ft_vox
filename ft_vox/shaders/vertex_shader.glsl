@@ -44,8 +44,9 @@ void main()
 	
 	vec3 points[4];
 
-	if (face == 3) 
+	switch (face)
 	{
+	case 3:
 		points[0] = vec3(0.0, 0.0, 0.0);
 		points[1] = vec3(1.0, 0.0, 0.0);
 		points[2] = vec3(1.0, 1.0, 0.0);
@@ -55,9 +56,8 @@ void main()
 		texCoords[1] = vec2(zero_texture.x + size_texture/ width_Texture, zero_texture.y + 0.0);
 		texCoords[2] = vec2(zero_texture.x + size_texture/ width_Texture, zero_texture.y + size_texture/ width_Texture);
 		texCoords[3] = vec2(zero_texture.x + 0.0, zero_texture.y + size_texture/ width_Texture);
-	}
-	else if (face == 2)
-	{
+		break;
+	case 2 :
 		points[0] = vec3(0.0, 0.0, 1.0);
 		points[1] = vec3(1.0, 0.0, 1.0);
 		points[2] = vec3(1.0, 1.0, 1.0);
@@ -68,9 +68,8 @@ void main()
 		texCoords[1] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + 0.0);
 		texCoords[2] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + size_texture / width_Texture);
 		texCoords[3] = vec2(zero_texture.x + 0.0, zero_texture.y + size_texture / width_Texture);
-	}
-	else if (face == 1) 
-	{
+		break;
+	case 1 :
 		points[0] = vec3(0.0, 0.0, 0.0);
 		points[1] = vec3(0.0, 0.0, 1.0);
 		points[2] = vec3(0.0, 1.0, 1.0);
@@ -80,9 +79,8 @@ void main()
 		texCoords[1] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + 0.0);
 		texCoords[2] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + size_texture / width_Texture);
 		texCoords[3] = vec2(zero_texture.x + 0.0, zero_texture.y + size_texture / width_Texture);
-	}
-	else if (face == 0) 
-	{
+		break;
+	case  0 : 
 		points[0] = vec3(1.0, 0.0, 0.0);
 		points[1] = vec3(1.0, 0.0, 1.0);
 		points[2] = vec3(1.0, 1.0, 1.0);
@@ -92,9 +90,8 @@ void main()
 		texCoords[1] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + 0.0);
 		texCoords[2] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + size_texture / width_Texture);
 		texCoords[3] = vec2(zero_texture.x + 0.0, zero_texture.y + size_texture / width_Texture);
-	}
-	else if (face == 5) 
-	{
+		break;
+	case  5 :
 		points[0] = vec3(0.0, 0.0, 0.0);
 		points[1] = vec3(1.0, 0.0, 0.0);
 		points[2] = vec3(1.0, 0.0, 1.0);
@@ -104,9 +101,8 @@ void main()
 		texCoords[1] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + 0.0);
 		texCoords[2] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + size_texture / width_Texture);
 		texCoords[3] = vec2(zero_texture.x + 0.0, zero_texture.y + size_texture / width_Texture);
-	}
-	else if (face == 4) 
-	{
+		break;
+	case  4 : 
 		points[0] = vec3(0.0, 1.0, 0.0);
 		points[1] = vec3(1.0, 1.0, 0.0);
 		points[2] = vec3(1.0, 1.0, 1.0);
@@ -116,8 +112,8 @@ void main()
 		texCoords[1] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + 0.0);
 		texCoords[2] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + size_texture / width_Texture);
 		texCoords[3] = vec2(zero_texture.x + 0.0, zero_texture.y + size_texture / width_Texture);
+		break;
 	}
-
 
     vec3 newPos;
 
