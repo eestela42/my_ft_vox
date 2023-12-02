@@ -12,7 +12,7 @@ bool color = true;
 
 bool color_p = false;
 
-glm::vec3 cameraPos = glm::vec3(-2.0f, 0.0f, 0.0f);
+glm::vec3 cameraPos = glm::vec3(-2.0f, 12.0f, 0.0f);
 
 glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
@@ -22,7 +22,7 @@ glm::vec3 cameraRight = glm::normalize(glm::cross(cameraUp, cameraDirection));
 
 glm::vec3 cameraFront = glm::vec3(1.0f, 0.0f, 0.0f);
 
-float cameraSpeed = 0.05f;
+float baseCameraSpeed = 0.5f;
 
 float yaw = 0.0f;
 float pitch = 0.0f;
@@ -81,10 +81,11 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		std::cout << "fps : " << fps << std::endl;
 
-	cameraSpeed = 0.05f;
+	float cameraSpeed = baseCameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-		cameraSpeed = 1.0f;
-	
+		cameraSpeed = cameraSpeed * 5;
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+		cameraSpeed = cameraSpeed / 2;
 
 
 	if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS && !color_p)
@@ -107,21 +108,6 @@ void processInput(GLFWwindow *window)
         cameraPos += cameraSpeed * cameraUp;
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 		cameraPos -= cameraSpeed * cameraUp;
-
-	// if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	// 	cameraPos.x += 0.1f;
-	// if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	// 	cameraPos.x -= 0.1f;
-
-	// if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	// 	cameraPos.z -= 0.1f;
-	// if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	// 	cameraPos.z += 0.1f;
-
-	// if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-	// 	cameraPos.y -= 0.1f;
-	// if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-	// 	cameraPos.y += 0.1f;
 }
 
 
@@ -129,15 +115,16 @@ void processInput(GLFWwindow *window)
 
 int main(int ac, char** av)
 {
-	
-	game game(1200, 800);
+	game game(1920, 1080);
 	game.init();
-
 	game.initShadder();
+
+	game.initChunks();
 	
 	game.initBuffers();
 
-	// game.initTexture();
+	game.initTexture();
+
 
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -151,9 +138,9 @@ int main(int ac, char** av)
 
 
 
-	//textures
+	// textures
 
-	glUniform1i(glGetUniformLocation(game.getShaderProgram(), "ourTexture"), 0);
+	glUniform1i(glGetUniformLocation(game.getShaderProgram(), "Texture"), 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, game.getTexture());
 
@@ -186,7 +173,7 @@ int main(int ac, char** av)
 
 	glm::mat4 projection;
 
-	projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 350.0f);
+	projection = glm::perspective(45.0f, (float)game.getScreenWidth() / (float)game.getScreenHeight(), 0.1f, 350.0f);
 	
 	
 
@@ -197,13 +184,15 @@ int main(int ac, char** av)
     auto last_frame_time = clock.now();
     
 	// glEnable(GL_CULL_FACE);  
-	// glCullFace(GL_BACK); 
+	// glCullFace(GL_FRONT); 
 
 	
 
 
-
+	//draw only lines
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+
 	glfwSetInputMode(game.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glfwSetCursorPosCallback(game.getWindow(), mouse_callback);
@@ -213,6 +202,7 @@ int main(int ac, char** av)
  	while(!glfwWindowShouldClose(game.getWindow()))
 	{
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+
 		//FPS
 		auto current_time = clock.now();
         std::chrono::duration<double> frame_duration = current_time - last_frame_time;
@@ -244,10 +234,17 @@ int main(int ac, char** av)
 
 		processInput(game.getWindow());
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.2f, 0.3f, 0.6f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // draw our first triangle
+		unsigned int modelCameraPos = glGetUniformLocation(game.getShaderProgram(), "cameraPos");
+		glUniform3f(modelCameraPos, cameraPos[0], cameraPos[1], cameraPos[2]);
+
+		unsigned int modelCameraFront = glGetUniformLocation(game.getShaderProgram(), "cameraFront");
+		glUniform3f(modelCameraFront, cameraFront[0], cameraFront[1], cameraFront[2]);
+
+
 		glm::mat4 modelView =  projection * view * model;
 		unsigned int modelViewLoc = glGetUniformLocation(game.getShaderProgram(), "modelView");
 		glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, &modelView[0][0]);
@@ -259,6 +256,7 @@ int main(int ac, char** av)
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR) {
 			std::cout << "error : " << error << std::endl;
+			break ;
 		}
 		
     } 

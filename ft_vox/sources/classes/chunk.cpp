@@ -4,13 +4,16 @@ using namespace ee;
 
 chunk::chunk() : pos_x(0), pos_y(0)
 {
-	std::cout << "chunk()" << std::endl;
-	this->data = new char[this->size_x * this->size_y * this->size_z];
+	this->data = new u_char[this->size_x * this->size_y * this->size_z];
+	for (int i = 0; i < this->size_x * this->size_y * this->size_z; i++)
+		this->data[i] = 0;
 }
 
 chunk::chunk(int x, int y) : pos_x(x), pos_y(y)
 {
-	this->data = new char[this->size_x * this->size_y * this->size_z];
+	this->data = new u_char[this->size_x * this->size_y * this->size_z];
+	for (int i = 0; i < this->size_x * this->size_y * this->size_z; i++)
+		this->data[i] = 0;
 }
 
 chunk::~chunk()
@@ -18,13 +21,10 @@ chunk::~chunk()
 	delete [] this->data;
 }
 
-
 void chunk::fill()
 {
-	for (int i = 0; i < this->size_x * this->size_y * this->size_z; i++)
-		this->data[i] = 0;
-	char block_type[2] = {1, 2};
-	for (int z = 0; z < 64; z++)
+	u_char block_type[2] = {(u_char)(pos_x % 255 + 1) , u_char(pos_y % 255 + 1) };
+	for (int z = 0; z < 10; z++)
 	{
 		for (int y = 0; y < size_y; y++)
 		{
@@ -34,29 +34,22 @@ void chunk::fill()
 			}
 		}
 	}
-	this->data[0] = 1;
+
+	this->data[size_x * size_y * 10 + 2 + size_x] = 1;
+	// this->data[size_x] = 2;
+
 }
 
-
-// void chunk::createVertex(std::vector<int> &vertexes, glm::vec3 pos)
-// {
-// 	pos.x += this->pos_x * this->size_x;
-// 	pos.y += this->pos_y * this->size_y;
-// 	vertexes.push_back(pos);
-// 	vertexes.push_back(glm::vec3(0.0f));
-// 	vertexes.push_back(glm::vec3(1.0f));
-// }
-
-void chunk::createPointVertex(std::vector<int> &vertexes, int pos, int orientation, int type)
+void chunk::createPointVertex(std::vector<int> &vertexes, int pos, char orientation, char type)
 {
-	for (int i = 0; i < 4; i++)
+	for (char i = 0; i < 4; i++)
 	{
 		vertexes.push_back(this->pos_x);
 		vertexes.push_back(this->pos_y);
 		vertexes.push_back(pos);
-		vertexes.push_back(orientation);
-		vertexes.push_back(type);
-		vertexes.push_back(i);
+		int tmp = 0;
+		tmp = (orientation<< 24) + (i << 8) + (type);
+		vertexes.push_back(tmp);
 	}
 }
 
@@ -78,7 +71,7 @@ void chunk::parkour(int start_vert, std::vector<int> &vertexes,std::vector<unsig
 	int x = pos % this->size_x;
 	int y = (pos / this->size_x) % this->size_y;
 	int z = pos / (this->size_x * this->size_y);
-	int size_vert = 6;
+	int size_vert = 4;
 	if ( x == size_x - 1 || data[pos + 1] == 0)
 	{
 		createTrianglesFace(start_vert + vertexes.size() / size_vert, triangles);
@@ -121,22 +114,16 @@ void chunk::parkour(int start_vert, std::vector<int> &vertexes,std::vector<unsig
 
 void chunk::dataToVBO(std::vector<int> &vertexes, std::vector<unsigned int> &triangles)
 {
-	// std::vector<glm::vec3> vertexes;
-	// std::vector<unsigned int> triangles;
 	bool tab[this->size_x*this->size_y*this->size_z];
 	for (int i = 0; i < this->size_x*this->size_y*this->size_z; i++)
 		tab[i] = false;
-	std::cout << "start parkour " << this->size_x*this->size_y*this->size_z << std::endl;
-	std::cout << "vertexes.size() : " << vertexes.size() << std::endl;
-	std::cout << "triangles.size() : " << triangles.size() << std::endl;
 
-	int size_vert = 6;
+	int size_vert = 4;
 	for (int i = 0; i < this->size_x*this->size_y*this->size_z; i++)
 	{
 		if (this->data[i] != 0)
 			parkour( vertexes.size() / size_vert, this->vertexes, this->triangles, tab, i);
 	}
-	std::cout << "end parkour" << std::endl;
 
 	vertexes.reserve(vertexes.size() + this->vertexes.size());
 	vertexes.insert(vertexes.end(), this->vertexes.begin(), this->vertexes.end());
@@ -144,8 +131,6 @@ void chunk::dataToVBO(std::vector<int> &vertexes, std::vector<unsigned int> &tri
 	triangles.reserve(triangles.size() + this->triangles.size());
 	triangles.insert(triangles.end(), this->triangles.begin(), this->triangles.end());
 
-	std::cout << "vertexes.size() : " << vertexes.size() / 6 << std::endl;
-	std::cout << "triangles.size() : " << triangles.size() / 3 << std::endl;
 }
 
 
@@ -169,7 +154,7 @@ int chunk::getPos_y()
 
 
 
-void chunk::setData(char *tmp)
+void chunk::setData(u_char *tmp)
 {
 	if (!tmp && tmp == this->data)
 		return ;
@@ -177,24 +162,12 @@ void chunk::setData(char *tmp)
 	this->data = tmp;
 }
 
-char *chunk::getData()
+u_char *chunk::getData()
 {
 	return this->data;
 }
 
 
-void* chunk::getToVBO()
-{
-	return &this->toVBO[0];
-}
-
-int chunk::memoryToVBO()
-{
-	std::cout << "sizeof(this->toVBO[0]) : " << this->toVBO.size() * sizeof(t_block_info) << std::endl;
-	// std::cout << "sizeof(this->toVBO) : " << sizeof(this->toVBO.) << std::endl;
-
-	return (this->toVBO.size() * sizeof(t_block_info));
-}
 
 void* chunk::getToEBO()
 {

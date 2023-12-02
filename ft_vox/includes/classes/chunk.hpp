@@ -9,12 +9,6 @@ namespace ee
 
 
 
-typedef struct s_block_info
-{
-	glm::vec3 pos;
-	int normal;
-	int type;
-}		t_block_info;
 
 
 
@@ -23,9 +17,7 @@ typedef struct s_block_info
 		// private :
 		public :
 
-		char *data;
-
-		std::vector<t_block_info> toVBO;
+		u_char *data;
 		std::vector<unsigned int> triangles;
 		std::vector<int> vertexes;
 		int size_x = 32;
@@ -43,7 +35,7 @@ typedef struct s_block_info
 		void fill();
 
 		void createVertex(std::vector<int> &vertexes, glm::vec3 pos);
-		void createPointVertex(std::vector<int> &vertexes, int pos, int orientation, int type);
+		void createPointVertex(std::vector<int> &vertexes, int pos, char orientation, char type);
 
 
 		void createTrianglesFace(int start, std::vector<unsigned int> &triangles);
@@ -54,8 +46,8 @@ typedef struct s_block_info
 		int getPos_x();
 		int getPos_y();
 
-		void setData(char *tmp);
-		char *getData();
+		void setData(u_char *tmp);
+		u_char *getData();
 
 		void* getToVBO();
 		int memoryToVBO();

@@ -7,6 +7,7 @@
 # include "classes/mesh.hpp"
 # include "classes/chunk.hpp"
 # include "classes/game.hpp"
+# include "classes/RLE.hpp"
 
 
 

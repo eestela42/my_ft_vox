@@ -14,8 +14,8 @@ namespace ee
 class game
 {
 private:
-	int width;
-	int height;
+	int screenWidth;
+	int screenHeight;
 	bool isRunning;
 	ee::mesh mesh;
 	GLFWwindow *window;
@@ -29,8 +29,7 @@ private:
 
 public:
 
-	ee::chunk 	*chunks;
-	ee::chunk 				chunk;
+	ee::chunk 				*chunks;
 	std::vector<int> vertexes;
 	std::vector<unsigned int> triangles;
 
@@ -42,6 +41,9 @@ public:
 	int 			initShadder();
 	int				initBuffers();
 	int				initTexture();
+
+	int				initChunks();
+
 	void 			gameLoop();
 
 
@@ -76,6 +78,9 @@ public:
 
 	void 			displayEBO();
 	void 			displayVBO();
+
+	int getScreenWidth();
+	int getScreenHeight();
 };
 }
 
