@@ -8,9 +8,11 @@ namespace ee
 {
 class perlinNoise
 {
+	
 private :
 
 	std::vector<int> 				Permutation;
+
 public:
 
 		/*****	1 - constructors 		*****/

@@ -10,6 +10,7 @@ namespace ee
 {
 class game
 {
+	
 private:
 
 	int 							screenWidth;

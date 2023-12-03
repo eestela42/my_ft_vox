@@ -13,7 +13,8 @@ namespace ee
 
 class chunk
 {
-	private :
+	
+private :
 
 	u_char*							data;
 	ee::RLE							rle;

@@ -8,7 +8,9 @@ namespace ee
 	
 class RLE
 {
+
 private :
+
 	u_int 							size_x = 16;
 	u_int 							size_y = 16;
 	u_int 							size_z = 256;
