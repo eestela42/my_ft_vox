@@ -137,14 +137,7 @@ void main()
 	newPos.y = z + points[point].y;
 	newPos.z = y + points[point].z;
 	
-	// vec3 viewDir = vec3(0.0, 0.0, 0.0);
-	// vec3 newCamPos = vec3(cameraPos.x, cameraPos.z, cameraPos.y);
-	// viewDir = newCamPos - newPos;
-	// // viewDir = cameraFront;
-	// vec3 normal = cross(points[0] -points[1], points[0] - points[2]);
-	// float dotProduct = dot(viewDir, normal);
-	// if (dotProduct > 0.0)
-	// 	return ;
+	
 
 	gl_Position = modelView * vec4(newPos, 1.0);
 	
