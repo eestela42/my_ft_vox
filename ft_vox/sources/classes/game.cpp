@@ -61,37 +61,41 @@ int game::init()
 
 	glfwSetWindowMonitor(this->window, glfwGetMonitors(&monitor)[monitor - 1], 0, 0, this->screenWidth, this->screenHeight, GLFW_DONT_CARE);
 	
-	
+	std::cout << "Start time " << glfwGetTime() << std::endl;
 	return (0);
 }
 
 int game::initChunks()
 {
-	int size = 5;
+	int size = 10;
 	this->chunks = new ee::chunk[size * size];
-	ee::RLE bp = ee::RLE(chunks[0].size_x, chunks[0].size_y, 20);
+	
+	ee::RLE bp;
+	
+	
 	// bp.print();
-	
+	std::srand(std::time(nullptr));
 
 	
 	
-
 	for (int y = 0; y < size; y++)
 	{
 		for (int x = 0; x < size; x++)
 		{	
 			std::cout << "x = " << x << " y = " << y
 						<< " time " << glfwGetTime() << std::endl;
-
+			std::srand(glfwGetTime() * 10000);
+			bp.generateChunk(x, y, std::rand() / RAND_MAX);
 			this->chunks[x + y * size].setPos(x, y);
-			// this->chunks[x + y * size].setRle(bp);
+			
+			this->chunks[x + y * size].setRle(bp);
 
-			// this->chunks[x + y * size].setData(bp.createDataFromRle());
+			this->chunks[x + y * size].setData(bp.createDataFromRle());
 
-			// this->chunks[x + y * size].rleToVbo(this->vertexes, this->triangles);
+			this->chunks[x + y * size].rleToVbo(this->vertexes, this->triangles);
 
-			this->chunks[x + y * size].fill();
-			this->chunks[x + y * size].dataToVBO(this->vertexes, this->triangles);
+			// this->chunks[x + y * size].fill();
+			// this->chunks[x + y * size].dataToVBO(this->vertexes, this->triangles);
 		}
 	}
 	// displayVBO();
@@ -193,14 +197,14 @@ int game::initBuffers()
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // position attribute
-	glVertexAttribIPointer(0, 1, GL_INT,  4 * sizeof(int), (void*)0);
+	glVertexAttribIPointer(0, 1, GL_INT,  3 * sizeof(int), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribIPointer(1, 1, GL_INT,  4 * sizeof(int), (void*)(1 * sizeof(int)));
+	glVertexAttribIPointer(1, 1, GL_INT,  3 * sizeof(int), (void*)(1 * sizeof(int)));
 	glEnableVertexAttribArray(1);
-	glVertexAttribIPointer(2, 1, GL_INT,  4 * sizeof(int), (void*)(2 * sizeof(int)));
+	glVertexAttribIPointer(2, 1, GL_INT,  3 * sizeof(int), (void*)(2 * sizeof(int)));
 	glEnableVertexAttribArray(2);
-	glVertexAttribIPointer(3, 1, GL_INT,  4 * sizeof(int), (void*)(3 * sizeof(int)));
-	glEnableVertexAttribArray(3);
+	
+	
 	
 	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     glBindVertexArray(0); 

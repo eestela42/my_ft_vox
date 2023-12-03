@@ -9,8 +9,8 @@ namespace ee
 	class RLE
 	{
 		public :
-		u_int size_x = 32;
-		u_int size_y = 32;
+		u_int size_x = 16;
+		u_int size_y = 16;
 		u_int size_z = 256;
 		std::vector<std::vector<u_char>> rubans;
 
@@ -22,11 +22,12 @@ namespace ee
 		RLE(const RLE &other);
 		RLE(u_int x, u_int y, u_int z);
 		RLE(u_int x, u_int y, u_int z, u_char type);
+		RLE(float seed);
 
 		void				 	createFromData(u_char *data);
 		u_char*					createDataFromRle();
-		void					makeRowFaces(std::vector<u_char> &faces, u_int i, u_int end, std::vector<u_char> &ruban, u_int *pos, u_char facing);
-		std::vector<u_char>		getVisibleFaces();
+
+		void 					generateChunk(int chunk_x, int chunk_y, float seed);
 
 		void print();
 

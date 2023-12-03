@@ -21,11 +21,12 @@ namespace ee
 		
 		std::vector<unsigned int> triangles;
 		std::vector<int> vertexes;
-		int size_x = 32;
-		int size_y = 32;
+		int size_x = 16;
+		int size_y = 16;
 		int size_z = 256;
 		int pos_x;
 		int pos_y;
+		int size_vertex = 3;
 
 		public :
 
@@ -33,18 +34,20 @@ namespace ee
 		chunk();
 		chunk(int x, int y);
 		chunk(int x, int y, ee::RLE &other);
+		chunk(float seed);
+		chunk(int x, int y, float seed);
 
 		void fill();
 
 		void createVertex(std::vector<int> &vertexes, glm::vec3 pos);
-		void createPointVertex(std::vector<int> &vertexes, int pos, char orientation, u_char type);
+		void createPointVertex(std::vector<int> &vertexes, int pos, u_char orientation, u_char type);
 
 
 		void createTrianglesFace(int start, std::vector<unsigned int> &triangles);
 		void parkour(int start_vert, std::vector<int> &vertexes,std::vector<unsigned int> &triangles, bool *tab, int pos);
 		
 		void dataToVBO(std::vector<int> &vertexes, std::vector<unsigned int> &triangles);
-		void rleToVbo(std::vector<int> &vertexes, std::vector<unsigned int> &triangles);
+		void rleToVbo(std::vector<int> &out_vertexes, std::vector<unsigned int> &out_triangles);
 
 		void setPos(int x, int y);
 		int getPos_x();

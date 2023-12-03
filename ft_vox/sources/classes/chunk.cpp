@@ -29,6 +29,19 @@ chunk::chunk(int x, int y, ee::RLE &other) : chunk()
 	this->rle = other;
 }
 
+chunk::chunk(float seed): chunk()
+{
+	this->rle = RLE(pos_x, pos_y, seed);
+}
+
+chunk::chunk(int x, int y, float seed): chunk()
+{
+	pos_x = x;
+	pos_y = y;
+	this->rle = RLE(pos_x, pos_y, seed);
+}
+
+
 void chunk::fill()
 {
 	ee::perlinNoise noise = ee::perlinNoise();
@@ -54,16 +67,26 @@ void chunk::fill()
 
 }
 
-void chunk::createPointVertex(std::vector<int> &vertexes, int pos, char orientation, u_char type)
+
+void chunk::createPointVertex(std::vector<int> &vertexes, int pos, u_char orientation, u_char type)
 {
 	for (char i = 0; i < 4; i++)
 	{
-		vertexes.push_back(this->pos_x);
-		vertexes.push_back(this->pos_y);
-		vertexes.push_back(pos);
+		u_int data[3];
+		for (int i = 0; i < 3; i++)
+			data[i] = 0;
+
+		data[0] = this->pos_x << 8;
+		data[0] += (this->pos_y >> 16) & 0x000000FF;
+		data[1] = (this->pos_y & 0x0000FFFF) << 16;
+		data[1] += (pos >> 2) & 0x0000FFFF;
 		int tmp = 0;
-		tmp = (orientation<< 24) + (i << 8) + (type);
-		vertexes.push_back(tmp);
+		tmp = (orientation << 8) + type;
+		data[2] = tmp << 14;
+		data[2] += pos << 30;
+		vertexes.push_back(data[0]);
+		vertexes.push_back(data[1]);
+		vertexes.push_back(data[2]);
 	}
 }
 
@@ -85,54 +108,52 @@ void chunk::parkour(int start_vert, std::vector<int> &vertexes,std::vector<unsig
 	int x = pos % this->size_x;
 	int y = (pos / this->size_x) % this->size_y;
 	int z = pos / (this->size_x * this->size_y);
-	int size_vert = 4;
 	if ( x == size_x - 1 || data[pos + 1] == 0)
 	{
-		createTrianglesFace(start_vert + vertexes.size() / size_vert, triangles);
+		createTrianglesFace(start_vert + vertexes.size() / size_vertex, triangles);
 
 		createPointVertex(vertexes, pos, 0, data[pos]);
 	}
 	if (x == 0 || data[pos - 1] == 0)
 	{
-		createTrianglesFace(start_vert + vertexes.size() / size_vert, triangles);
+		createTrianglesFace(start_vert + vertexes.size() / size_vertex, triangles);
 
 		createPointVertex(vertexes, pos, 1, data[pos]);
 
 	}
 	if (y == size_y - 1 || data[pos + this->size_x] == 0)
 	{
-		createTrianglesFace(start_vert + vertexes.size() / size_vert, triangles);
+		createTrianglesFace(start_vert + vertexes.size() / size_vertex, triangles);
 
 		createPointVertex(vertexes, pos, 2, data[pos]);
 	}
 	if (y == 0 || data[pos - this->size_x] == 0)
 	{
-		createTrianglesFace(start_vert + vertexes.size() / size_vert, triangles);
+		createTrianglesFace(start_vert + vertexes.size() / size_vertex, triangles);
 
 		createPointVertex(vertexes, pos, 3, data[pos]);
 	}
 	if (z == size_z - 1 || data[pos + this->size_x * this->size_y] == 0)
 	{
-		createTrianglesFace(start_vert + vertexes.size() / size_vert, triangles);
+		createTrianglesFace(start_vert + vertexes.size() / size_vertex, triangles);
 
 		createPointVertex(vertexes, pos, 4, data[pos]);
 	}
 	if (z == 0 || data[pos - this->size_x * this->size_y] == 0)
 	{
-		createTrianglesFace(start_vert + vertexes.size() / size_vert, triangles);
+		createTrianglesFace(start_vert + vertexes.size() / size_vertex, triangles);
 
 		createPointVertex(vertexes, pos, 5, data[pos]);
 	}
 	return;
 }
 
-void	chunk::rleToVbo(std::vector<int> &vertexes, std::vector<unsigned int> &triangles)
+void	chunk::rleToVbo(std::vector<int> &out_vertexes, std::vector<unsigned int> &out_triangles)
 {
 	bool tab[this->size_x*this->size_y*this->size_z];
 	for (int i = 0; i < this->size_x*this->size_y*this->size_z; i++)
 		tab[i] = false;
 
-	int size_vert = 4;
 	int XY = 0;
 	for (std::vector<std::vector<u_char>>::iterator ruban = this->rle.rubans.begin(); ruban != this->rle.rubans.end(); ruban++)
 	{
@@ -144,7 +165,7 @@ void	chunk::rleToVbo(std::vector<int> &vertexes, std::vector<unsigned int> &tria
 				continue;
 			for (int z = 0; z < (*ruban)[i + 1]; z++)
 			{
-				parkour( vertexes.size() / size_vert, this->vertexes, this->triangles, tab,
+				parkour( out_vertexes.size() / size_vertex, this->vertexes, this->triangles, tab,
 					pos + (zero + z) * (size_x * size_y));
 			}
 			zero += (*ruban)[i + 1];
@@ -152,11 +173,11 @@ void	chunk::rleToVbo(std::vector<int> &vertexes, std::vector<unsigned int> &tria
 		XY++;
 	}
 
-	vertexes.reserve(vertexes.size() + this->vertexes.size());
-	vertexes.insert(vertexes.end(), this->vertexes.begin(), this->vertexes.end());
+	out_vertexes.reserve(out_vertexes.size() + this->vertexes.size());
+	out_vertexes.insert(out_vertexes.end(), this->vertexes.begin(), this->vertexes.end());
 
-	triangles.reserve(triangles.size() + this->triangles.size());
-	triangles.insert(triangles.end(), this->triangles.begin(), this->triangles.end());
+	out_triangles.reserve(out_triangles.size() + this->triangles.size());
+	out_triangles.insert(out_triangles.end(), this->triangles.begin(), this->triangles.end());
 
 }
 
@@ -166,11 +187,11 @@ void chunk::dataToVBO(std::vector<int> &vertexes, std::vector<unsigned int> &tri
 	for (int i = 0; i < this->size_x*this->size_y*this->size_z; i++)
 		tab[i] = false;
 
-	int size_vert = 4;
+	int size_vertex = 4;
 	for (int i = 0; i < this->size_x*this->size_y*this->size_z; i++)
 	{
 		if (this->data[i] != 0)
-			parkour( vertexes.size() / size_vert, this->vertexes, this->triangles, tab, i);
+			parkour( vertexes.size() / size_vertex, this->vertexes, this->triangles, tab, i);
 	}
 	
 

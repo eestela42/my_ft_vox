@@ -75,7 +75,7 @@ glm::vec2 GetConstantVector(int v) {
 
 float perlinNoise::noise2d(float x, float y)
 {
-	std::srand(std::time(nullptr));
+	
 	Permutation = MakePermutation();
 	// std::cout << "noise2d" << std::endl;
 	x = x  * 0.2654f;
