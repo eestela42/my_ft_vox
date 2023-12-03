@@ -11,73 +11,85 @@ namespace ee
 class game
 {
 private:
-	int screenWidth;
-	int screenHeight;
-	bool isRunning;
-	ee::mesh mesh;
-	GLFWwindow *window;
-	unsigned int VBO, VAO, EBO;
-	unsigned int shaderProgram;
-	unsigned int texture;
+
+	int 							screenWidth;
+	int 							screenHeight;
+
+	bool 							isRunning;
 	
-
+	GLFWwindow*						window;
+	unsigned int 					VBO, VAO, EBO;
+	unsigned int 					shaderProgram;
 	
-
-
+	ee::mesh 						mesh;
+	unsigned int 					texture;
+	
+	ee::chunk*						chunks;
+	
+	std::vector<int> 				vertexes;
+	int size_vertex = 3;	
+	
+	std::vector<unsigned int> 		triangles;
+	
+	
 public:
-
-	ee::chunk 				*chunks;
-	std::vector<int> vertexes;
-	std::vector<unsigned int> triangles;
+	
+		/*****	1 - constructors 		*****/
 
 	~game();
 	game(/* args */);
 	game(int width, int height);
 
-	int 			init();
-	int 			initShadder();
-	int				initBuffers();
-	int				initTexture();
+		/*****	 2 - initialisations 	*****/
 
-	int				initChunks();
+	int 							init();
+	int 							initShadder();
+	int								initBuffers();
+	int								initTexture();
 
-	void 			gameLoop();
+	int								initChunks();
+
+		/*****	3 - gameLoop 			*****/
+
+	void 							gameLoop();
+
+		/*****	4 - data getters 		*****/
+
+	ee::chunk*						getChunks();
+	std::vector<int> 				getVertexes();
+	std::vector<unsigned int> 		getTriangles();
+
+		/*****	5 - openGlIDs getters 	*****/
+
+	unsigned int 					getVAO();
+	unsigned int 					getVBO();
+	unsigned int 					getEBO();
+
+	unsigned int 					getShaderProgram();
+
+	unsigned int 					getTexture();
+
+		/*****	6 - variables getters	*****/
+
+	bool	 						getIsRunning();
+	void 							updateIsRunning(bool tmp);
+
+	ee::mesh 						getMesh();
+	void 							upDateMesh(ee::mesh tmp);
+
+	GLFWwindow* 					getWindow();
+	void 							upDateWindow(GLFWwindow *tmp);
 
 
+		/*****	7 - uniforms setters 	*****/
 
-	unsigned int 	getVAO();
-	unsigned int 	getVBO();
-	void			upDateVBO(std::vector<glm::vec3> tmp);
-	unsigned int 	getEBO();
-	unsigned int 	getTexture();
+	void							setUniformBool(const std::string &name, bool value) const;
+	void 							setUniformInt(const std::string &name, int value) const;
+	void							setUniformFloat(const std::string &name, float value) const;
 
-	unsigned int 	getShaderProgram();
-
-	bool	 		getIsRunning();
-	void 			updateIsRunning(bool tmp);
-
-	
-
-	ee::mesh 			getMesh();
-	void 			upDateMesh(ee::mesh tmp);
-
-	GLFWwindow* 	getWindow();
-	void 			upDateWindow(GLFWwindow *tmp);
-
-	float* 			vbo_to_vertexes();
-	unsigned int* 	ebo_to_indices();
-
-	
-
-	void			setBool(const std::string &name, bool value) const;
-	void 			setInt(const std::string &name, int value) const;
-	void			setFloat(const std::string &name, float value) const;
-
-	void 			displayEBO();
-	void 			displayVBO();
-
-	int getScreenWidth();
-	int getScreenHeight();
+		/*****	8 - screen getters 	*****/
+	int 							getScreenWidth();
+	int 							getScreenHeight();
 };
 }
 

@@ -2,6 +2,8 @@
 
 using namespace ee;
 
+		/*****	1 - constructors 		*****/
+
 perlinNoise::~perlinNoise()
 {}
 
@@ -15,24 +17,17 @@ perlinNoise::perlinNoise(const perlinNoise &copy)
 	*this = copy;
 }
 
-perlinNoise &perlinNoise::operator=(const perlinNoise &copy)
-{
-	if (this != &copy)
-	{
-		*this = copy;
-	}
-	return (*this);
-}
+		/*****	2 - noise makers	 	*****/
 
-float fade(float t) {
+float perlinNoise::fade(float t) {
     return t * t * t * (t * (t * 6 - 15) + 10);
 }
 
-float lerp(float t, float a, float b) {
+float perlinNoise::lerp(float t, float a, float b) {
     return a + t * (b - a);
 }
 
-void	Shuffle(std::vector<int> &arrayToShuffle) {
+void	perlinNoise::Shuffle(std::vector<int> &arrayToShuffle) {
 	for(int e = arrayToShuffle.size()-1; e > 0; e--) {
 		int index = std::round(((float)std::rand()/(float)RAND_MAX) * (e-1));
 		int temp = arrayToShuffle[e];
@@ -59,7 +54,8 @@ std::vector<int>  perlinNoise::MakePermutation() {
 	return permu;
 }
 
-glm::vec2 GetConstantVector(int v) {
+
+glm::vec2 perlinNoise::GetConstantVector(int v) {
 	// v is the value from the permutation table
 	const int h = v & 3;
 	if(h == 0)
@@ -77,7 +73,7 @@ float perlinNoise::noise2d(float x, float y)
 {
 	
 	Permutation = MakePermutation();
-	// std::cout << "noise2d" << std::endl;
+	
 	x = x  * 0.2654f;
 	y = y  * 0.2654f;	
 	int xi = (int)std::floor(x) % 255;
@@ -86,51 +82,50 @@ float perlinNoise::noise2d(float x, float y)
 	float xf = x - (int)std::floor(x);
 	float yf = y - (int)std::floor(y);
 
-	// std::cout << "x = " << x << " y = " << y << std::endl;
-
-	// std::cout << "xi = " << xi << " yi = " << yi << std::endl;
-	// std::cout << "xf = " << xf << " yf = " << yf << std::endl;
 
 	glm::vec2 topRight = glm::vec2(xf-1.0, yf-1.0);
 	glm::vec2 topLeft =  glm::vec2(xf, yf-1.0);
 	glm::vec2 bottomRight =  glm::vec2(xf-1.0, yf);
 	glm::vec2 bottomLeft =  glm::vec2(xf, yf);
 
-	// std::cout << "topRight = " << topRight.x << " " << topRight.y << std::endl;
-	// std::cout << "topLeft = " << topLeft.x << " " << topLeft.y << std::endl;
-	// std::cout << "bottomRight = " << bottomRight.x << " " << bottomRight.y << std::endl;
-	// std::cout << "bottomLeft = " << bottomLeft.x << " " << bottomLeft.y << std::endl;
 
 	int valueTopRight = Permutation[Permutation[xi+1]+yi+1];
 	int valueTopLeft = Permutation[Permutation[xi]+yi+1];
 	int valueBottomRight = Permutation[Permutation[xi+1]+yi];
 	int valueBottomLeft = Permutation[Permutation[xi]+yi];
 
-	// std::cout << "valueTopRight = " << valueTopRight << std::endl;
-	// std::cout << "valueTopLeft = " << valueTopLeft << std::endl;
-	// std::cout << "valueBottomRight = " << valueBottomRight << std::endl;
-	// std::cout << "valueBottomLeft = " << valueBottomLeft << std::endl;
 
 	float  dotTopRight = glm::dot(topRight, GetConstantVector(valueTopRight));
 	float  dotTopLeft = glm::dot(topLeft, GetConstantVector(valueTopLeft));
 	float  dotBottomRight = glm::dot(bottomRight, GetConstantVector(valueBottomRight));
 	float  dotBottomLeft = glm::dot(bottomLeft, GetConstantVector(valueBottomLeft));
 
-	// std::cout << "dotTopRight = " << dotTopRight << std::endl;
-	// std::cout << "dotTopLeft = " << dotTopLeft << std::endl;
-	// std::cout << "dotBottomRight = " << dotBottomRight << std::endl;
-	// std::cout << "dotBottomLeft = " << dotBottomLeft << std::endl;
 
 	float u = fade(xf);
 	float v = fade(yf);
 
 
 
-	// std::cout << "u = " << u << " v = " << v  << " ret = " << lerp(u,
-	// 	lerp(v, dotBottomLeft, dotTopLeft),
-	// 	lerp(v, dotBottomRight, dotTopRight)) << std::endl;
 
 	return lerp(u,
 		lerp(v, dotBottomLeft, dotTopLeft),
 		lerp(v, dotBottomRight, dotTopRight));
+}
+
+		/*****	3 - data getters 		*****/
+
+std::vector<int> &perlinNoise::getPermutation()
+{
+	return (this->Permutation);
+}
+
+		/*****	4 - operators 		*****/
+
+perlinNoise &perlinNoise::operator=(const perlinNoise &copy)
+{
+	if (this != &copy)
+	{
+		*this = copy;
+	}
+	return (*this);
 }

@@ -3,6 +3,8 @@
 
 using namespace ee;
 
+		/*****	1 - constructors 		*****/
+
 chunk::~chunk()
 {
 	delete [] this->data;
@@ -42,7 +44,9 @@ chunk::chunk(int x, int y, float seed): chunk()
 }
 
 
-void chunk::fill()
+		/*****	2 - fillers	 	*****/
+
+void chunk::fillFromData()
 {
 	ee::perlinNoise noise = ee::perlinNoise();
 
@@ -67,6 +71,7 @@ void chunk::fill()
 
 }
 
+		/*****	3 - toVbo		 	*****/
 
 void chunk::createPointVertex(std::vector<int> &vertexes, int pos, u_char orientation, u_char type)
 {
@@ -148,6 +153,28 @@ void chunk::parkour(int start_vert, std::vector<int> &vertexes,std::vector<unsig
 	return;
 }
 
+void chunk::dataToVBO(std::vector<int> &vertexes, std::vector<unsigned int> &triangles)
+{
+	bool tab[this->size_x*this->size_y*this->size_z];
+	for (int i = 0; i < this->size_x*this->size_y*this->size_z; i++)
+		tab[i] = false;
+
+	int size_vertex = 4;
+	for (int i = 0; i < this->size_x*this->size_y*this->size_z; i++)
+	{
+		if (this->data[i] != 0)
+			parkour( vertexes.size() / size_vertex, this->vertexes, this->triangles, tab, i);
+	}
+	
+
+	vertexes.reserve(vertexes.size() + this->vertexes.size());
+	vertexes.insert(vertexes.end(), this->vertexes.begin(), this->vertexes.end());
+
+	triangles.reserve(triangles.size() + this->triangles.size());
+	triangles.insert(triangles.end(), this->triangles.begin(), this->triangles.end());
+
+}
+
 void	chunk::rleToVbo(std::vector<int> &out_vertexes, std::vector<unsigned int> &out_triangles)
 {
 	bool tab[this->size_x*this->size_y*this->size_z];
@@ -155,7 +182,7 @@ void	chunk::rleToVbo(std::vector<int> &out_vertexes, std::vector<unsigned int> &
 		tab[i] = false;
 
 	int XY = 0;
-	for (std::vector<std::vector<u_char>>::iterator ruban = this->rle.rubans.begin(); ruban != this->rle.rubans.end(); ruban++)
+	for (std::vector<std::vector<u_char>>::iterator ruban = this->rle.getRubans().begin(); ruban != this->rle.getRubans().end(); ruban++)
 	{
 		int zero = 0;
 		for (int i = 0; i < (*ruban).size(); i += 2)
@@ -181,30 +208,10 @@ void	chunk::rleToVbo(std::vector<int> &out_vertexes, std::vector<unsigned int> &
 
 }
 
-void chunk::dataToVBO(std::vector<int> &vertexes, std::vector<unsigned int> &triangles)
-{
-	bool tab[this->size_x*this->size_y*this->size_z];
-	for (int i = 0; i < this->size_x*this->size_y*this->size_z; i++)
-		tab[i] = false;
-
-	int size_vertex = 4;
-	for (int i = 0; i < this->size_x*this->size_y*this->size_z; i++)
-	{
-		if (this->data[i] != 0)
-			parkour( vertexes.size() / size_vertex, this->vertexes, this->triangles, tab, i);
-	}
-	
-
-	vertexes.reserve(vertexes.size() + this->vertexes.size());
-	vertexes.insert(vertexes.end(), this->vertexes.begin(), this->vertexes.end());
-
-	triangles.reserve(triangles.size() + this->triangles.size());
-	triangles.insert(triangles.end(), this->triangles.begin(), this->triangles.end());
-
-}
 
 
-/**getter and setters**/
+
+		/*****	4 - getters	 	*****/
 
 void chunk::setPos(int x, int y)
 {
@@ -249,9 +256,4 @@ ee::RLE&	chunk::getRle()
 	return this->rle;
 }
 
-
-void* chunk::getToEBO()
-{
-	return &this->triangles[0];
-}
 

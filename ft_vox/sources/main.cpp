@@ -146,10 +146,6 @@ int main(int ac, char** av)
 
 	glEnable(GL_DEPTH_TEST);
 
-	game.setBool("isColor", true);
-	
-
-
 	// game.displayEBO();
 	// game.displayVBO();
 
@@ -213,24 +209,6 @@ int main(int ac, char** av)
 
 
 		glfwPollEvents();
-		game.setFloat("zoom", zoom_value);
-		/****matrixes****/
-		
-		
-
-		if (zoom)
-		{
-			if (zoom_value + zoom * 0.1f > 0.0f)
-				zoom_value += zoom * 0.1f;
-			std::cout << "zoom : " << zoom_value << std::endl;
-		}
-		if (color)
-			game.setBool("isColor", true);
-		else
-			game.setBool("isColor", false);
-
-
-		/****matrixes END****/
 
 		processInput(game.getWindow());
 
@@ -249,7 +227,7 @@ int main(int ac, char** av)
 		unsigned int modelViewLoc = glGetUniformLocation(game.getShaderProgram(), "modelView");
 		glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, &modelView[0][0]);
 
-		glDrawElements(GL_TRIANGLES, game.triangles.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, game.getTriangles().size(), GL_UNSIGNED_INT, 0);
 		// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(game.getWindow());

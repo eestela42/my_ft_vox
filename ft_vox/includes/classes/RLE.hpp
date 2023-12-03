@@ -6,33 +6,48 @@
 namespace ee
 {
 	
-	class RLE
-	{
-		public :
-		u_int size_x = 16;
-		u_int size_y = 16;
-		u_int size_z = 256;
-		std::vector<std::vector<u_char>> rubans;
+class RLE
+{
+private :
+	u_int 							size_x = 16;
+	u_int 							size_y = 16;
+	u_int 							size_z = 256;
+	std::vector<std::vector<u_char>>	rubans;
 
 
-		public :
+public :
 
-		~RLE();
-		RLE();
-		RLE(const RLE &other);
-		RLE(u_int x, u_int y, u_int z);
-		RLE(u_int x, u_int y, u_int z, u_char type);
-		RLE(float seed);
+		/*****	1 - constructors 		*****/
 
-		void				 	createFromData(u_char *data);
-		u_char*					createDataFromRle();
+	~RLE();
+	RLE();
+	RLE(const RLE &other);
+	RLE(u_int x, u_int y, u_int z);
+	RLE(u_int x, u_int y, u_int z, u_char type);
+	RLE(float seed);
 
-		void 					generateChunk(int chunk_x, int chunk_y, float seed);
+		/*****	2 - fillers	 		*****/
 
-		void print();
+	void				 			createFromData(u_char *data);
+	u_char*							createDataFromRle();
 
-		RLE& operator=(const RLE &other);
-	};
+	void 							generateChunk(int chunk_x, int chunk_y, float seed);
+
+							
+		/*****	3 - data getters 		*****/
+
+	u_int							getSize_x();
+	u_int							getSize_y();
+	u_int							getSize_z();
+
+	std::vector<std::vector<u_char>>&	getRubans();
+	
+		/*****	4 - operators 		*****/
+
+	void 							print();
+
+	RLE& 							operator=(const RLE &other);
+};
 }
 
 

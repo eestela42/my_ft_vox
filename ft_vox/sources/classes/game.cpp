@@ -3,25 +3,27 @@
 
 using namespace ee;
 
+		/*****	1 - constructors 		*****/
+
 game::~game()
 {
 	glfwDestroyWindow(this->window);
+
 	glDeleteBuffers(1, &this->VBO);
 	glDeleteBuffers(1, &this->EBO);
 	glDeleteVertexArrays(1, &this->VAO);
 	glDeleteTextures(1, &this->texture);
 	glDeleteProgram(this->shaderProgram);
 
-	
+	delete[] this->chunks;
 	
 	glfwTerminate();
-
 }
 
 game::game()
 {
-	this->screenWidth = 600;
-	this->screenHeight = 450;
+	this->screenWidth = 1920;
+	this->screenHeight = 1080;
 	this->isRunning = false;
 	this->window = NULL;
 	this->mesh = ee::mesh();
@@ -33,6 +35,7 @@ game::game(int width, int height): game()
 	this->screenHeight = height;
 }
 
+		/*****	 2 - initialisations 	*****/
 
 int game::init()
 {
@@ -93,13 +96,8 @@ int game::initChunks()
 			this->chunks[x + y * size].setData(bp.createDataFromRle());
 
 			this->chunks[x + y * size].rleToVbo(this->vertexes, this->triangles);
-
-			// this->chunks[x + y * size].fill();
-			// this->chunks[x + y * size].dataToVBO(this->vertexes, this->triangles);
 		}
 	}
-	// displayVBO();
-	// displayEBO();
 	return (0);
 }
 
@@ -218,7 +216,7 @@ int game::initTexture()
 
 
 	glGenTextures(1, &this->texture);
-glBindTexture(GL_TEXTURE_2D, this->texture);
+	glBindTexture(GL_TEXTURE_2D, this->texture);
 
 	// Set the texture wrapping parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -268,6 +266,8 @@ glBindTexture(GL_TEXTURE_2D, this->texture);
 	return 0;
 }
 
+		/*****	3 - gameLoop 			*****/
+
 void game::gameLoop()
 {	
     while (this->isRunning)
@@ -276,7 +276,24 @@ void game::gameLoop()
 	}	
 }
 
+		/*****	4 - data getters 		*****/
 
+ee::chunk*						game::getChunks()
+{
+	return (this->chunks);
+}
+
+std::vector<int> 				game::getVertexes()
+{
+	return (this->vertexes);
+}
+
+std::vector<unsigned int> 		game::getTriangles()
+{
+	return (this->triangles);
+}
+
+		/*****	5 - openGlIDs getters 	*****/
 
 unsigned int game::getVAO()
 {
@@ -286,11 +303,6 @@ unsigned int game::getVAO()
 unsigned int game::getVBO()
 {
 	return (this->VBO);
-}
-
-void	game::upDateVBO(std::vector<glm::vec3> tmp)
-{
-	this->mesh.vertexes = tmp;
 }
 
 unsigned int game::getEBO()
@@ -307,6 +319,8 @@ unsigned int game::getShaderProgram()
 {
 	return (this->shaderProgram);
 }
+
+		/*****	6 - openGlIDs setters 	*****/
 
 bool game::getIsRunning()
 {
@@ -334,53 +348,23 @@ void game::upDateWindow(GLFWwindow* tmp)
 	this->window = tmp;
 }
 
-float* game::vbo_to_vertexes()
-{
-	float *tmp = new float[this->mesh.vertexes.size() * 3];
-	int i = 0;
-	for	(std::vector<glm::vec3>::iterator it = this->mesh.vertexes.begin(); it != this->mesh.vertexes.end(); ++it)
-	{
-		tmp[i] = (*it)[0];
-		tmp[i + 1] = (*it)[1];
-		tmp[i + 2] = (*it)[2];
-		i += 3;
-	}
-	return (tmp);
-}
+		/*****	7 - openGlIDs setters 	*****/
 
-
-
-
-void game::setBool(const std::string &name, bool value) const
+void game::setUniformBool(const std::string &name, bool value) const
 {         
     glUniform1i(glGetUniformLocation(this->shaderProgram, name.c_str()), (int)value); 
 }
-void game::setInt(const std::string &name, int value) const
+void game::setUniformInt(const std::string &name, int value) const
 { 
     glUniform1i(glGetUniformLocation(this->shaderProgram, name.c_str()), value); 
 }
-void game::setFloat(const std::string &name, float value) const
+void game::setUniformFloat(const std::string &name, float value) const
 { 
     glUniform1f(glGetUniformLocation(this->shaderProgram, name.c_str()), value); 
 }
 
 
-
-void game::displayVBO()
-{
-	for (int i  = 0; i < this->vertexes.size(); i+=4)
-	{
-		std::cout << "vert " << i << " : "<<vertexes[i] << " " << this->vertexes[i + 1] << " " << this->vertexes[i + 2] << " " << this->vertexes[i + 3] << std::endl;
-	}
-}
-
-void game::displayEBO()
-{
-	for (int i = 0; i < this->triangles.size(); i+=3)
-	{
-		std::cout << "tri " << i << " : "<<triangles[i] << " " << this->triangles[i + 1] << " " << this->triangles[i + 2] << std::endl;
-	}
-}
+		/*****	8 - screen getters 	*****/
 
 int game::getScreenWidth()
 {
