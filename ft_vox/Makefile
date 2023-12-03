@@ -15,7 +15,8 @@ SRCS =	main.cpp	\
 CLASS = game.cpp	\
 		mesh.cpp	\
 		RLE.cpp		\
-		chunk.cpp
+		chunk.cpp	\
+		perlinNoise.cpp	\
 
 
 

@@ -1,3 +1,4 @@
+#include "../../includes/header.hpp"
 #include "../../includes/classes/chunk.hpp"
 
 using namespace ee;
@@ -30,22 +31,26 @@ chunk::chunk(int x, int y, ee::RLE &other) : chunk()
 
 void chunk::fill()
 {
+	ee::perlinNoise noise = ee::perlinNoise();
+
 	u_char block_type[2] = {(u_char)(pos_x % 255 + 1) , u_char(pos_y % 255 + 1) };
-	for (int z = 0; z < 10; z++)
+	for (int y = 0; y < size_y; y++)
 	{
-		for (int y = 0; y < size_y; y++)
+		for (int x = 0; x < size_x; x++)
 		{
-			for (int x = 0; x < size_x; x++)
+			int h = std::abs(noise.noise2d(x, y) * 5) + 10;
+			std::cout << h << std::endl;
+			for (int z = 0; z < h; z++)
 			{
-				this->data[x + y * this->size_x + z * this->size_x * this->size_y] = block_type[(x % 2 + y % 2 + z % 2) % 2];
+			this->data[x + y * this->size_x + z * this->size_x * this->size_y] = block_type[(x % 2 + y % 2 + z % 2) % 2];
 			}
 		}
 	}
 
 	this->data[size_x * size_y * 10 + 2 + size_x] = 1;
 
+	this->data[2 + size_y * size_x * 15] = 2;
 	rle.createFromData(this->data);
-	// this->data[size_x] = 2;
 
 }
 

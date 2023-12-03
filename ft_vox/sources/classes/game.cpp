@@ -70,30 +70,28 @@ int game::initChunks()
 	int size = 5;
 	this->chunks = new ee::chunk[size * size];
 	ee::RLE bp = ee::RLE(chunks[0].size_x, chunks[0].size_y, 20);
-	bp.print();
-	u_char *tmp = bp.createDataFromRle();
-	for (int i = 0; i < 32*32*255; i++)
-	{
-		std::cout << (int)tmp[i] << " ";
-		if (i % 32 == 0)
-			std::cout << std::endl;
-	}
+	// bp.print();
+	
+
+	
+	
 
 	for (int y = 0; y < size; y++)
 	{
 		for (int x = 0; x < size; x++)
 		{	
-			std::cout << "x = " << x << " y = " << y << " time " << glfwGetTime() << std::endl;
+			std::cout << "x = " << x << " y = " << y
+						<< " time " << glfwGetTime() << std::endl;
 
 			this->chunks[x + y * size].setPos(x, y);
-			this->chunks[x + y * size].setRle(bp);
+			// this->chunks[x + y * size].setRle(bp);
 
-			this->chunks[x + y * size].setData(bp.createDataFromRle());
+			// this->chunks[x + y * size].setData(bp.createDataFromRle());
 
-			this->chunks[x + y * size].rleToVbo(this->vertexes, this->triangles);
+			// this->chunks[x + y * size].rleToVbo(this->vertexes, this->triangles);
 
-			// this->chunks[x + y * size].fill();
-			// this->chunks[x + y * size].dataToVBO(this->vertexes, this->triangles);
+			this->chunks[x + y * size].fill();
+			this->chunks[x + y * size].dataToVBO(this->vertexes, this->triangles);
 		}
 	}
 	// displayVBO();

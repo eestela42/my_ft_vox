@@ -98,7 +98,12 @@ void	mesh::parseFromFile(std::string file_name)
 					i++;
 				}
 				point = false;
-			}
+			}for (int i = 0; i < 32*32*255; i++)
+	{
+		// std::cout << (int)tmp[i] << " ";
+		if (i % 32 == 0)
+			std::cout << std::endl;
+	}
 			if (str[0].empty() || str[0] == "." || str[1].empty() || str[1] == "." || str[2].empty() || str[2] == ".")
 			{
 				std::cout << "Error line " << count << " : missing number" << std::endl;
@@ -338,8 +343,8 @@ void mesh::min_max_bounds(glm::vec3& min_bound, glm::vec3& max_bound)
 
 void	mesh::center_around_orgin()
 {
-	glm::vec3 min_bound = {0, 0, 0};
-	glm::vec3 max_bound = {0, 0, 0};
+	glm::vec3 min_bound = {FLT_MAX, FLT_MAX, FLT_MAX};
+	glm::vec3 max_bound = {FLT_MIN, FLT_MIN, FLT_MIN};
 
 	min_max_bounds(min_bound, max_bound);
 
