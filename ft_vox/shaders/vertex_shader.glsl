@@ -1,8 +1,7 @@
 #version 330 core
-layout (location = 0) in int data1; // 3 byes
-layout (location = 1) in int data2; // 3 byes
-layout (location = 2) in int data3;     // 10 bits = 2 bytes + 2 bits
- // 2 bytes
+layout (location = 0) in int data1;
+layout (location = 1) in int data2;
+layout (location = 2) in int data3;
 
 
 out vec3 ourColor;
@@ -54,7 +53,7 @@ void main()
 
 	switch (face)
 	{
-	case 3:
+	case 3: // east
 		points[0] = vec3(0.0, 0.0, 0.0);
 		points[1] = vec3(1.0, 0.0, 0.0);
 		points[2] = vec3(1.0, 1.0, 0.0);
@@ -65,7 +64,7 @@ void main()
 		texCoords[2] = vec2(zero_texture.x + size_texture/ width_Texture, zero_texture.y + size_texture/ width_Texture);
 		texCoords[3] = vec2(zero_texture.x + 0.0, zero_texture.y + size_texture/ width_Texture);
 		break;
-	case 2 :
+	case 2 : // west
 		points[0] = vec3(0.0, 0.0, 1.0);
 		points[1] = vec3(1.0, 0.0, 1.0);
 		points[2] = vec3(1.0, 1.0, 1.0);
@@ -77,7 +76,7 @@ void main()
 		texCoords[2] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + size_texture / width_Texture);
 		texCoords[3] = vec2(zero_texture.x + 0.0, zero_texture.y + size_texture / width_Texture);
 		break;
-	case 1 :
+	case 1 : // south
 		points[0] = vec3(0.0, 0.0, 0.0);
 		points[1] = vec3(0.0, 0.0, 1.0);
 		points[2] = vec3(0.0, 1.0, 1.0);
@@ -88,7 +87,7 @@ void main()
 		texCoords[2] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + size_texture / width_Texture);
 		texCoords[3] = vec2(zero_texture.x + 0.0, zero_texture.y + size_texture / width_Texture);
 		break;
-	case  0 : 
+	case  0 :  // north
 		points[0] = vec3(1.0, 0.0, 0.0);
 		points[1] = vec3(1.0, 0.0, 1.0);
 		points[2] = vec3(1.0, 1.0, 1.0);
@@ -99,7 +98,7 @@ void main()
 		texCoords[2] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + size_texture / width_Texture);
 		texCoords[3] = vec2(zero_texture.x + 0.0, zero_texture.y + size_texture / width_Texture);
 		break;
-	case  5 :
+	case  5 : // bottom
 		points[0] = vec3(0.0, 0.0, 0.0);
 		points[1] = vec3(1.0, 0.0, 0.0);
 		points[2] = vec3(1.0, 0.0, 1.0);
@@ -110,7 +109,7 @@ void main()
 		texCoords[2] = vec2(zero_texture.x + size_texture / width_Texture, zero_texture.y + size_texture / width_Texture);
 		texCoords[3] = vec2(zero_texture.x + 0.0, zero_texture.y + size_texture / width_Texture);
 		break;
-	case  4 : 
+	case  4 : // top
 		points[0] = vec3(0.0, 1.0, 0.0);
 		points[1] = vec3(1.0, 1.0, 0.0);
 		points[2] = vec3(1.0, 1.0, 1.0);

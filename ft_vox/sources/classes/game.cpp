@@ -70,13 +70,13 @@ int game::init()
 
 int game::initChunks()
 {
-	int size = 10;
+	int size = 1;
 	this->chunks = new ee::chunk[size * size];
 	
-	ee::RLE bp;
+	ee::RLE bp(size_x, size_y, 10, 11);
+	bp.print();
 	
 	
-	// bp.print();
 	std::srand(std::time(nullptr));
 
 	
@@ -87,17 +87,22 @@ int game::initChunks()
 		{	
 			std::cout << "x = " << x << " y = " << y
 						<< " time " << glfwGetTime() << std::endl;
-			std::srand(glfwGetTime() * 10000);
-			bp.generateChunk(x, y, std::rand() / RAND_MAX);
+			// std::srand(glfwGetTime() * 10000);
+			// bp.generateChunk(x, y, std::rand() / RAND_MAX);
 			this->chunks[x + y * size].setPos(x, y);
 			
 			this->chunks[x + y * size].setRle(bp);
 
-			this->chunks[x + y * size].setData(bp.createDataFromRle());
+			// this->chunks[x + y * size].setData(bp.createDataFromRle());
 
 			this->chunks[x + y * size].rleToVbo(this->vertexes, this->triangles);
 		}
 	}
+	// exit(0);
+	std::cout << "vertex sizze = " << vertexes.size() << std::endl;
+	std::cout << "triangles sizze = " << triangles.size() << std::endl;
+
+
 	return (0);
 }
 
@@ -283,12 +288,12 @@ ee::chunk*						game::getChunks()
 	return (this->chunks);
 }
 
-std::vector<int> 				game::getVertexes()
+std::vector<u_int> 				game::getVertexes()
 {
 	return (this->vertexes);
 }
 
-std::vector<unsigned int> 		game::getTriangles()
+std::vector<u_int> 		game::getTriangles()
 {
 	return (this->triangles);
 }

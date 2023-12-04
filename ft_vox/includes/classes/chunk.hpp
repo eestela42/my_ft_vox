@@ -21,13 +21,14 @@ private :
 
 	int 							size_x = 16;
 	int 							size_y = 16;
-	int 							size_z = 256;
+	int 							size_z = 255;
 	int 							pos_x;
 	int 							pos_y;
 	int 							size_vertex = 3;
 
-	std::vector<unsigned int> 		triangles;
-	std::vector<int> 				vertexes;
+	ee::chunk**						neighbours;//top right bot left
+	std::vector<u_int> 		triangles;
+	std::vector<u_int> 				vertexes;
 
 public :
 
@@ -52,10 +53,16 @@ public :
 									
 	void 							dataToVBO(std::vector<int> &vertexes, std::vector<unsigned int> &triangles);
 	
-	void 							rleToVbo(std::vector<int> &out_vertexes, std::vector<unsigned int> &out_triangles);
+	std::vector<u_char>&			getNeighbourRuban(u_int neigh, u_int &x, u_int &y, bool &error);
+	void							createRleVertex(std::vector<u_int> &vertexes, int pos, u_char orientation, u_char type);
+
+	void							createFaces(u_int start, u_int end, u_int x, u_int y, u_int z, u_char type, u_int face, u_int start_vert,
+										std::vector<u_int> &vertexes, std::vector<u_int> &triangles);
+	void 							rleToVbo(std::vector<u_int> &out_vertexes, std::vector<u_int> &out_triangles);
 
 		/*****	4 - getters	 			*****/
 
+	void 							setNeighbours(int index, ee::chunk* other);
 
 	void 							setPos(int x, int y);
 	int 							getPos_x();

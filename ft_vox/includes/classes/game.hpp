@@ -27,10 +27,14 @@ private:
 	
 	ee::chunk*						chunks;
 	
-	std::vector<int> 				vertexes;
-	int size_vertex = 3;	
 	
-	std::vector<unsigned int> 		triangles;
+	int 							size_vertex = 3;	
+	u_int 							size_x = 16;
+	u_int 							size_y = 16;
+	u_int 							size_z = 255;
+	
+	std::vector<u_int> 				vertexes;
+	std::vector<u_int> 				triangles;
 	
 	
 public:
@@ -57,8 +61,8 @@ public:
 		/*****	4 - data getters 		*****/
 
 	ee::chunk*						getChunks();
-	std::vector<int> 				getVertexes();
-	std::vector<unsigned int> 		getTriangles();
+	std::vector<u_int> 				getVertexes();
+	std::vector<u_int> 		getTriangles();
 
 		/*****	5 - openGlIDs getters 	*****/
 

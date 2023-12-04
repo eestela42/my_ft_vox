@@ -13,8 +13,8 @@ private :
 
 	u_int 							size_x = 16;
 	u_int 							size_y = 16;
-	u_int 							size_z = 256;
-	std::vector<std::vector<u_char>>	rubans;
+	u_int 							size_z = 255;
+	std::vector<u_char>	rubans;
 
 
 public :
@@ -42,7 +42,7 @@ public :
 	u_int							getSize_y();
 	u_int							getSize_z();
 
-	std::vector<std::vector<u_char>>&	getRubans();
+	std::vector<u_char>&	getRubans();
 	
 		/*****	4 - operators 		*****/
 
